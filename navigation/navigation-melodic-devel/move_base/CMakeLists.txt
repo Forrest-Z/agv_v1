@@ -32,23 +32,6 @@ generate_dynamic_reconfigure_options(
     cfg/MoveBase.cfg
 )
 
-##### Add by TungNV
-add_message_files(
-  FILES
-  #header.msg
-  #action.msg
-  agv_action.msg
-)
-add_service_files(
-  FILES
-  lift_up.srv
-)
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
-#########################
-
 catkin_package(
     CATKIN_DEPENDS
         dynamic_reconfigure
@@ -80,10 +63,6 @@ add_executable(move_base_node src/move_base_node.cpp)
 add_dependencies(move_base_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(move_base_node move_base)
 set_target_properties(move_base_node PROPERTIES OUTPUT_NAME move_base)
-
-add_executable(agv_service src/agv_service.cpp)
-target_link_libraries(agv_service ${catkin_LIBRARIES})
-add_dependencies(agv_service move_base_gencpp)
 
 install(
     TARGETS

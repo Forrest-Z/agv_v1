@@ -11,7 +11,23 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+#  message_runtime
 )
+
+##### Add by TungNV
+#add_message_files(
+#  FILES
+#  agv_action.msg
+#)
+#add_service_files(
+#  FILES
+#  lift_up.srv
+#)
+#generate_messages(
+#  DEPENDENCIES
+#  std_msgs
+#)
+#########################
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -134,6 +150,15 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/agv_main_node.cpp)
+
+##### Add by TungNV
+
+add_executable(agv_main src/agv_main.cpp)
+add_dependencies(agv_main ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(agv_main agv_main)
+set_target_properties(agv_main PROPERTIES OUTPUT_NAME agv_main)
+
+####################################################
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

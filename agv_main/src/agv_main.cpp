@@ -1,10 +1,12 @@
 #include "ros/ros.h"
-// #include <agv_main/agv_action.h>
-// #include <agv_main/lift_up.h>
+#include <agv_main/agv_main.h>
+#include <agv_main/agv_action.h>
+// #include <agv_main/lift_up.h>s
+#include <string>
 
-// ros::Publisher status_srv_pub_;
-// void PublishStatusService(agv_main::agv_action action);
-// agv_main::agv_action action_;
+#include <geometry_msgs/Twist.h>
+#include "geometry_msgs/PoseStamped.h"
+
 
 // bool lift_up_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
 // {
@@ -40,10 +42,53 @@
 //   ROS_INFO("agv_main.cpp-13-publish status action lift up!");
 // }
 
+void decodeJson(std::string type, std::string data){
+  ROS_INFO("agv_main.cpp-59-type: %s", type.c_str());
+  ROS_INFO("agv_main.cpp-60-data: %s", data.c_str());
+}
+void initialAgvAction(const agv_main::agv_action::ConstPtr& msg)
+{
+  ROS_INFO("agv_main.cpp-50-initialAgvAction()");
+  uint8_t action, status;
+  action = msg->action;
+  status = msg->status;
+  std::string type = msg->type;
+  std::string data = msg->data;
+
+  // std::string type = "geometry_msgs/PoseStamped";
+  // std::string data = "{\"header":{"seq":1,"stamp":0,"frame_id":"map"},"pose":{"position":{"x":0,"y":0,"z":0},"orientation":{"x":0,"y":0,"z":0,"w":0}}}\";
+
+  ROS_INFO("agv_main.cpp-57-action: %d", action);
+  ROS_INFO("agv_main.cpp-58-status: %d", status);
+
+  action_state = ActionState(action);
+  switch(action_state){
+    case ACTION_FLOAT:
+      break;
+    case ACTION_MANUAL:
+      break;
+    case ACTION_MOVE_BASE:
+      decodeJson(type, data);
+      break;
+    case ACTION_INITIAL_POSE:
+      break;
+    case ACTION_CHARGING_IN:
+      break;
+    case ACTION_CHARGING_OUT:
+      break;
+    case ACTION_LIFT_UP:
+      break;
+    case ACTION_LIFT_DOWN:
+      break;
+    default:
+    {}
+  }
+}
+
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "agv_main_node");
-  ros::NodeHandle n;
+  ROS_INFO("agv_main.cpp-41-main()");
+  ros::init(argc, argv, "agv_main");
 
   // ros::ServiceServer lift_up_service_ = n.advertiseService("lift_up_", lift_up_srv);
   // ROS_INFO("agv_main.cpp-36-Advertise service: lift_up_");
@@ -54,9 +99,15 @@ int main(int argc, char **argv)
   // ros::ServiceServer charging_out_service = n.advertiseService("charging_out_", charging_out_srv);
   // ROS_INFO("agv_main.cpp-42-Advertise service: chaging_out_");
 
-  // Publish the topic /current_pose
+  // // Publish the topic /current_pose
   // status_srv_pub_ = n.advertise<agv_main::agv_action>("agv_service_status", 0);
-  ROS_INFO("move_base.cpp-93-Publish topic: /agv_service_status");
+  // ROS_INFO("move_base.cpp-93-Publish topic: /agv_service_status");
+  
+  ros::NodeHandle n;
+  action_state = ACTION_FLOAT;
+
+  ros::Subscriber agv_action_ = n.subscribe("agv_action", 2, &initialAgvAction);
+  ROS_INFO("agv_main.cpp-85-Subscriber topic: /agv_action");
 
   ros::spin();
   return 0;

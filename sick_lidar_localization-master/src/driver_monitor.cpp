@@ -327,7 +327,7 @@ void sick_lidar_localization::DriverMonitor::runMonitorThreadCb(void)
     // initial wait until tcp connection established
     while(ros::ok() && m_monitoring_thread_running && driver_thread->isRunning() && !driver_thread->isConnected())
     {
-      ROS_INFO_STREAM("DriverMonitor: waiting for connection to localization controller");
+      ROS_INFO("driver_monitor.cpp-330- Waiting for connection to localization controller");
       ros::Duration(1).sleep(); // wait for initial tcp connection
     }
     // initial wait until monitoring starts

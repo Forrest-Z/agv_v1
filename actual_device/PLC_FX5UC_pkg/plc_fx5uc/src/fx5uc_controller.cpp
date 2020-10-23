@@ -90,7 +90,9 @@ int main(int argc, char **argv)
 
             fx5uc->modbus_write_coils(Mbit, 100, bitM_pub); 
             fx5uc->modbus_write_register(0, device.D[1]); 
-        } else ROS_INFO("fx5uc_controller.cpp-80-not listen"); 
+        } else {
+            // ROS_WARN("fx5uc_controller.cpp-80-not listen"); 
+        }
 
         loop_rate.sleep();
         ros::spinOnce();

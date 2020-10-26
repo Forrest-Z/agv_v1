@@ -61,8 +61,8 @@
 #include "move_base/MoveBaseConfig.h"
 #include "std_msgs/Int32.h"
 
-#include <move_base/agv_action.h>
-#include <move_base/lift_up.h>
+// #include <move_base/agv_action.h>
+// #include <move_base/lift_up.h>
 
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
@@ -199,7 +199,7 @@ namespace move_base {
 
       ros::Subscriber initial_pose_sub_, agv_action_;
       void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
-      void initialAgvAction(const move_base::agv_actionConstPtr& msg);
+      // void initialAgvAction(const move_base::agv_actionConstPtr& msg);
       ros::ServiceClient lift_up_client_, lift_down_client_, charging_in_client_, charging_out_client_;
       ActionState action_state;
 ////////////////////////////////////////////////////////////////////////

@@ -6,45 +6,29 @@
 
 #include <geometry_msgs/Twist.h>
 #include "geometry_msgs/PoseStamped.h"
-
-
-// bool lift_up_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
-// {
-//   ROS_INFO("agv_main.cpp-7-lift_up_srv()");
-//   action_.header.stamp = ros::Time::now();
-//   action_.action = 5;
-//   action_.status = 1;
-//   PublishStatusService(action_);
-
-//   res.sum = req.a + req.b;
-//   ROS_INFO("agv_main.cpp-10-request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
-//   ROS_INFO("agv_main.cpp-11-sending back response: [%ld]", (long int)res.sum);
-//   return true;
-// }
-// bool lift_down_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
-// {
-//   ROS_INFO("agv_main.cpp-16-lift_down_srv()");
-//   return true;
-// }
-// bool charging_in_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
-// {
-//   ROS_INFO("agv_main.cpp-21-charging_in_srv()");
-//   return true;
-// }
-// bool charging_out_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
-// {
-//   ROS_INFO("agv_main.cpp-26-charging_out_srv()");
-//   return true;
-// }
-
-// void PublishStatusService(agv_main::agv_action action){
-//   status_srv_pub_.publish(action);
-//   ROS_INFO("agv_main.cpp-13-publish status action lift up!");
-// }
+#include <jsoncpp/json/json.h>
+#include <iostream>
 
 void decodeJson(std::string type, std::string data){
   ROS_INFO("agv_main.cpp-59-type: %s", type.c_str());
-  ROS_INFO("agv_main.cpp-60-data: %s", data.c_str());
+
+  // std::string text = "{\"1":{"name":"MIKE","surname":"TAYLOR"},"2":{"name":"TOM","surname":"JERRY\"}}";
+  // std::string text = "{\"array\":[\"item1\", \"item2\"], \"not an array\":\"asdf\"}";
+  // std::string text = data;
+  // ROS_INFO("agv_main.cpp-60-text: %s", text.c_str());
+  // Json::Value root;
+  // Json::Reader reader;
+  // bool parsingSuccessful = reader.parse( text, root );
+  // if ( !parsingSuccessful )
+  // {
+  //   ROS_ERROR("agv_main.cpp-55-Error parsing the string()");
+  // }
+  // const Json::Value mynames = root["name"];
+  // for ( int index = 0; index < mynames.size(); ++index )  
+  // {
+  //   ROS_INFO("agv_main.cpp-55-Error parsing the string()");
+  //     // cout << mynames[index] << endl;
+  // }
 }
 void initialAgvAction(const agv_main::agv_action::ConstPtr& msg)
 {
@@ -112,5 +96,37 @@ int main(int argc, char **argv)
   ros::spin();
   return 0;
 }
+// bool lift_up_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
+// {
+//   ROS_INFO("agv_main.cpp-7-lift_up_srv()");
+//   action_.header.stamp = ros::Time::now();
+//   action_.action = 5;
+//   action_.status = 1;
+//   PublishStatusService(action_);
 
+//   res.sum = req.a + req.b;
+//   ROS_INFO("agv_main.cpp-10-request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
+//   ROS_INFO("agv_main.cpp-11-sending back response: [%ld]", (long int)res.sum);
+//   return true;
+// }
+// bool lift_down_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
+// {
+//   ROS_INFO("agv_main.cpp-16-lift_down_srv()");
+//   return true;
+// }
+// bool charging_in_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
+// {
+//   ROS_INFO("agv_main.cpp-21-charging_in_srv()");
+//   return true;
+// }
+// bool charging_out_srv(agv_main::lift_up::Request  &req, agv_main::lift_up::Response &res)
+// {
+//   ROS_INFO("agv_main.cpp-26-charging_out_srv()");
+//   return true;
+// }
+
+// void PublishStatusService(agv_main::agv_action action){
+//   status_srv_pub_.publish(action);
+//   ROS_INFO("agv_main.cpp-13-publish status action lift up!");
+// }
 

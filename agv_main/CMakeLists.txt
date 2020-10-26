@@ -26,23 +26,28 @@ generate_messages(
 catkin_package(
   CATKIN_DEPENDS
     roscpp
+    rospy
     std_msgs
     message_runtime
 )
+#catkin_install_python(PROGRAMS scripts/agv_main.py
+#  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-#add_library(agv_main
-#  src/move_base.cpp
+
+#add_library(jsoncpp src/json.cpp)
+#add_library(jsoncpp src/json_value.cpp)
+#target_link_libraries(agv_main PRIVATE jsoncpp_object jsoncpp_static)
 
 ##### Add by TungNV
 
-add_executable(agv_main src/agv_main.cpp)
-add_dependencies(agv_main ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(agv_main ${catkin_LIBRARIES})
-set_target_properties(agv_main PROPERTIES OUTPUT_NAME agv_main)
+#add_executable(agv_main src/agv_main.cpp)
+#add_dependencies(agv_main ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(agv_main ${catkin_LIBRARIES})
+#set_target_properties(agv_main PROPERTIES OUTPUT_NAME agv_main)
 
 ######################################################################
-

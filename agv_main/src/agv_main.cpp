@@ -1,21 +1,26 @@
 #include "ros/ros.h"
 #include <agv_main/agv_main.h>
 #include <agv_main/agv_action.h>
-// #include <agv_main/lift_up.h>s
+// #include <agv_main/lift_up.h>
 #include <string>
 
 #include <geometry_msgs/Twist.h>
 #include "geometry_msgs/PoseStamped.h"
-#include <jsoncpp/json/json.h>
 #include <iostream>
+
+// #include <jsoncpp/json/json.h>
+// #include <jsoncpp/json/reader.h>
+// #include <jsoncpp/json/writer.h>
+// #include <jsoncpp/json/value.h>
+// #include rospy_message_converter
 
 void decodeJson(std::string type, std::string data){
   ROS_INFO("agv_main.cpp-59-type: %s", type.c_str());
 
   // std::string text = "{\"1":{"name":"MIKE","surname":"TAYLOR"},"2":{"name":"TOM","surname":"JERRY\"}}";
   // std::string text = "{\"array\":[\"item1\", \"item2\"], \"not an array\":\"asdf\"}";
-  // std::string text = data;
-  // ROS_INFO("agv_main.cpp-60-text: %s", text.c_str());
+  std::string text = data;
+  ROS_INFO("agv_main.cpp-60-text: %s", text.c_str());
   // Json::Value root;
   // Json::Reader reader;
   // bool parsingSuccessful = reader.parse( text, root );

@@ -3,8 +3,7 @@
   <!-- Arguments -->
 
   <!-- agv_main -->
-  <node pkg="agv_main" type="agv_main" respawn="false" name="agv_main" output="screen">
-  </node>
+  <node pkg="agv_main" type="agv_main.py" respawn="false" name="agv_main" output="screen"></node>
 
 </launch>
 

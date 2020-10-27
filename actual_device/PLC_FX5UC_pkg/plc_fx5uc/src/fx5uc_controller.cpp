@@ -4,6 +4,7 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <ros/ros.h>
+#include "plc_fx5uc/agv_action.h"
 
 using namespace std;
 
@@ -15,6 +16,42 @@ using namespace std;
 #define PINK   5
 #define OCEAN  6
 #define WHITE  7
+
+bool isLiftUp = false;
+
+void liftActionCallback(const plc_fx5uc::agv_action& msg)
+{
+	ROS_INFO("fx5uc_controller.cpp-21-liftActionCallback()");
+	uint8_t action_ = msg.action;
+	// linefolowing::agv_action status = ActionState(action_);
+    switch(action_){
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:	  
+        break;
+      case 5:
+        break;
+      case 6:
+        break;
+      case 7:
+        isLiftUp = true;
+        // ROS_INFO("fx5uc_controller.cpp-45- Start LIFT UP");
+        break;
+      case 8:
+        // if(bitM_echo[14] == OFF) bitM_pub[14] = ON;
+        isLiftUp = false;
+        // ROS_INFO("fx5uc_controller.cpp-49- Start LIFT DOWN");
+        break;
+      default:
+      {}
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -35,7 +72,7 @@ int main(int argc, char **argv)
     cmd_PLC = nh.advertise<diagnostic_msgs::DiagnosticStatus>("PLC_infomation", 20);
 
     diagnostic_msgs::DiagnosticArray dir_array;
-	diagnostic_msgs::DiagnosticStatus PLC;
+	  diagnostic_msgs::DiagnosticStatus PLC;
     diagnostic_msgs::KeyValue LED;
     diagnostic_msgs::KeyValue Dock;
     diagnostic_msgs::KeyValue Xilanh;
@@ -43,12 +80,14 @@ int main(int argc, char **argv)
     PLC.name = "PLC-Fx5UC";
 	PLC.hardware_id = "192.168.1.51:502";
 
-    bool bitM_echo[100];
+    bool bitM_echo[300];
     bool bitM_pub[100];
+    
+	ros::Subscriber action = nh.subscribe("lift_action", 20, liftActionCallback);
 
     while(ros::ok())
     {   
-        fx5uc->modbus_read_coils(Mbit, 100, bitM_echo);
+        fx5uc->modbus_read_coils(Mbit, 300, bitM_echo);
         fx5uc->modbus_read_coils(PORT1, 7,device.y1);
         if(bitM_echo[0] == ON)// Nếu M0 on 
         {
@@ -74,18 +113,24 @@ int main(int argc, char **argv)
                 bitM_pub[1] = ON;bitM_pub[2] = OFF;bitM_pub[3] = OFF;
             }
             bitM_pub[16] = ON;  // nang xilanh
-            // if(bitM_echo[12] == OFF) bitM_pub[12] = ON;  // LIFT_UP
-            if(bitM_echo[14] == OFF) bitM_pub[14] = ON;  // LIFT_DOWN
+            if(isLiftUp == true && bitM_echo[200] == ON){            
+              ROS_INFO("fx5uc_controller.cpp-49- Start LIFT UP M201 = ",bitM_echo[201]);
+              bitM_pub[12] = ON;  // LIFT_UP
+            }
+            if(isLiftUp == false && bitM_echo[201] == ON){
+              ROS_INFO("fx5uc_controller.cpp-49- Start LIFT DOWN M200 = %d",bitM_echo[200]);
+              bitM_pub[14] = ON;  // LIFT_DOWN
+            }
             
         //     ///// Add by DuNV
         //     // ROS_INFO("fx5uc_controller.cpp-89- bitM_echo[20]: %d", bitM_echo[20]);
-             std::cout << "M20 = "<<bitM_echo[20] << " Y13 = "<< device.y1[3]<< std::endl;
+            //  std::cout << "M20 = "<<bitM_echo[20] << " Y13 = "<< device.y1[3]<< std::endl;
             if(bitM_echo[20] == ON) //sensor charging AGV
             {
                 // bitM_pub[18] = ON;   // send to PLC
                 // ros::Duration(5).sleep(); 
                 ROS_INFO("fx5uc_controller.cpp-89- Shutdown the IPC");
-                system("sudo shutdown now");
+                //system("sudo shutdown now");
             }
 
             fx5uc->modbus_write_coils(Mbit, 100, bitM_pub); 

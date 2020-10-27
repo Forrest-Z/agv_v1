@@ -23,7 +23,7 @@ const unsigned long timeoutMs = 1; //sec
 uint8_t action_ ;
 void actionCallback(const linefolowing::agv_action& msg)
 {
-	ROS_INFO("linefolowersick.cpp-55-actionCallback()");
+	ROS_INFO("Navigation_control.cpp-26-actionCallback()");
   action_ = msg.action;
 	// linefolowing::agv_action status = ActionState(action_);
     // switch(action_){
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
   /* Subscriber */
   ros::Subscriber cmd_vel;
   cmd_vel = nh.subscribe("cmd_vel", 20,cmd_velCallback);
-  ros::Subscriber action = nh.subscribe("agv_action", 20,actionCallback);
+  // ros::Subscriber action = nh.subscribe("agv_action", 20,actionCallback);
   uint64_t time_count;
   while (ros::ok())
   {

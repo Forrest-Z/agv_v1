@@ -10,6 +10,15 @@ find_package(catkin REQUIRED COMPONENTS
   fx5u_hardware
 )
 
+add_message_files(
+   FILES
+   agv_action.msg
+ )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
+
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES plc_fx5uc

@@ -61,9 +61,9 @@ uint8_t error_register;
 int8_t direct = 0;
 int8_t dir = 0;
 
-void actionCallback(const linefolowing::agv_action& msg)
+void chargerActionCallback(const linefolowing::agv_action& msg)
 {
-	ROS_INFO("linefolowersick.cpp-55-actionCallback()");
+	ROS_INFO("linefolowersick.cpp-55-chargerActionCallback()");
 	uint8_t action_ = msg.action;
 	// linefolowing::agv_action status = ActionState(action_);
     switch(action_){
@@ -73,16 +73,18 @@ void actionCallback(const linefolowing::agv_action& msg)
         break;
       case 2:
         break;
-      case 3:
+      case 4:
+        break;
+      case 5:
 	  		isCharginIn = true;
 			direct = -1;	  
         break;
-      case 4:
+      case 6:
 	  		direct = 1;
         break;
-      case 5:
+      case 7:
         break;
-      case 6:
+      case 8:
         break;
       default:
       {}
@@ -277,7 +279,7 @@ int main(int argc, char **argv)
 
 	/* Subscriber position line */
 	ros::Subscriber mls = n.subscribe(topicSubscribe, 20,mlsCallback);
-	ros::Subscriber action = n.subscribe("agv_action", 20,actionCallback);	 
+	ros::Subscriber action = n.subscribe("charging_action", 20, chargerActionCallback);	 
 	/* clock */
 	clock_t begin_time = clock();
 

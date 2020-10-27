@@ -48,7 +48,7 @@ def initialAgvAction(msg):
     rospy.loginfo("agv_main.py-data: " + str(data))
     message = json_message_converter.convert_json_to_ros_message(typeData, data)
     rospy.loginfo("agv_main.py-type: %s", typeData)
-    rospy.loginfo("agv_main.py-message: %s", message)
+    # rospy.loginfo("agv_main.py-message: %s", message)
     # rospy.loginfo("agv_main.py-action: " + str(action))
     action_mode = actionMode(action)
     rospy.loginfo("agv_main.py-action_mode: " + str(action_mode))
@@ -91,16 +91,17 @@ def initPoseFunction(msg):
     initPose = PoseWithCovarianceStamped()
     initPose.header = msg.header
     initPose.pose.pose = msg.pose
-    rospy.loginfo("agv_main.py-initPose: " + str(initPose))
     pub_init_pose.publish(initPose)
 def chargingInFunction(msg):
     print ("agv_main.py-chargingInFunction")
     global pub_charging
     pub_charging.publish(msg)
+    rospy.loginfo("agv_main.py-publish chargingIn: " + str(msg))
 def chargingOutFunction(msg):
     print ("agv_main.py-chargingOutFunction")
     global pub_charging
     pub_charging.publish(msg)
+    rospy.loginfo("agv_main.py-publish chargingOut: " + str(msg))
 def liftInFunction():
     print ("agv_main.py-liftInFunction")
 def liftUpFunction(msg):

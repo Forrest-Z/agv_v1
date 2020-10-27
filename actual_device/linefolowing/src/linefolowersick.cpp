@@ -73,18 +73,18 @@ void chargerActionCallback(const linefolowing::agv_action& msg)
         break;
       case 2:
         break;
-      case 4:
+      case 3:
         break;
-      case 5:
+      case 4:
 	  		isCharginIn = true;
 			direct = -1;	  
         break;
-      case 6:
+      case 5:
 	  		direct = 1;
         break;
-      case 7:
+      case 6:
         break;
-      case 8:
+      case 7:
         break;
       default:
       {}
@@ -279,7 +279,7 @@ int main(int argc, char **argv)
 
 	/* Subscriber position line */
 	ros::Subscriber mls = n.subscribe(topicSubscribe, 20,mlsCallback);
-	ros::Subscriber action = n.subscribe("charging_action", 20, chargerActionCallback);	 
+	ros::Subscriber action = n.subscribe("/charging_action", 20, chargerActionCallback);	 
 	/* clock */
 	clock_t begin_time = clock();
 

@@ -353,6 +353,7 @@ namespace move_base {
     action_goal.goal.target_pose = *goal;
 
     action_goal_pub_.publish(action_goal);  //publish the action_goal, call myExecute()
+    ROS_INFO("move_base.cpp-356-Publish the topic action_goal");
   }
 
   void MoveBase::clearCostmapWindows(double size_x, double size_y){
@@ -1185,21 +1186,21 @@ namespace move_base {
       if(done)
       {
         ROS_INFO("move_base.cpp-1104-While DONE");
-        if(isRotate == false){
-          ROS_INFO("move_base.cpp-1106-While done: REACH Goal");
-          int sizeofListActionGoal = listActionGoal.size();
-          ROS_INFO("move_base.cpp-1108-sizeofListActionGoal: %d", sizeofListActionGoal);
-          if(sizeofListActionGoal != 0){
-            auto action_goal_ = listActionGoal.begin();
-            action_goal_pub_.publish(*action_goal_);  //publish the action_goal, call myExecute()]
-            ROS_INFO("move_base.cpp-1112- Publish action_goal");
-            listActionGoal.erase(listActionGoal.begin(), ++listActionGoal.begin());
-            ROS_INFO("move_base.cpp-1114- Erase action_goal");
-          }
-          else{
-            publishZeroVelocity();
-          }
-        }
+        // if(isRotate == false){
+        //   ROS_INFO("move_base.cpp-1106-While done: REACH Goal");
+        //   int sizeofListActionGoal = listActionGoal.size();
+        //   ROS_INFO("move_base.cpp-1108-sizeofListActionGoal: %d", sizeofListActionGoal);
+        //   if(sizeofListActionGoal != 0){
+        //     auto action_goal_ = listActionGoal.begin();
+        //     action_goal_pub_.publish(*action_goal_);  //publish the action_goal, call myExecute()]
+        //     ROS_INFO("move_base.cpp-1112- Publish action_goal");
+        //     listActionGoal.erase(listActionGoal.begin(), ++listActionGoal.begin());
+        //     ROS_INFO("move_base.cpp-1114- Erase action_goal");
+        //   }
+        //   else{
+        //     publishZeroVelocity();
+        //   }
+        // }
         return true;
       }
 
@@ -1247,52 +1248,6 @@ namespace move_base {
     system(ss.str().c_str());
     // system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
   }
-  // void MoveBase::initialAgvAction(const move_base::agv_actionConstPtr& msg)
-  // {
-  //   ROS_INFO("move_base.cpp-1237-initialAgvAction()");
-  //   uint8_t action, status;
-  //   action = msg->action;
-  //   status = msg->status;
-  //   ROS_INFO("move_base.cpp-1239-action: %d", action);
-  //   ROS_INFO("move_base.cpp-1240-status: %d", status);
-
-  //   action_state = ActionState(action);
-  //   move_base::lift_up srv;
-  //   switch(action_state){
-  //     case ACTION_MANUAL:
-  //       break;
-  //     case ACTION_MOVE_BASE:
-  //       break;
-  //     case ACTION_INITIAL_POSE:
-  //       break;
-  //     case ACTION_CHARGING_IN:
-  //       charging_in_client_.call(srv);
-  //       break;
-  //     case ACTION_CHARGING_OUT:
-  //       charging_out_client_.call(srv);
-  //       break;
-  //     case ACTION_LIFT_UP:
-  //       srv.request.a = msg->action;
-  //       srv.request.b = msg->status;
-
-  //       ROS_INFO("move_base.cpp-1239-srv.request.a: %d", srv.request.a);
-  //       ROS_INFO("move_base.cpp-1240-srv.request.b: %d", srv.request.b);
-  //       if (lift_up_client_.call(srv))
-  //       {
-  //         ROS_INFO("move_base.cpp-1254-Sum: %ld", (long int)srv.response.sum);
-  //       }
-  //       else
-  //       {
-  //         ROS_ERROR("move_base.cpp-1258-Failed to call service add_two_ints");
-  //       }
-  //       break;
-  //     case ACTION_LIFT_DOWN:
-  //       lift_down_client_.call(srv);
-  //       break;
-  //     default:
-  //     {}
-  //   }
-  // }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   double MoveBase::distance(const geometry_msgs::PoseStamped& p1, const geometry_msgs::PoseStamped& p2)

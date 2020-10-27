@@ -35,7 +35,8 @@
   
   <!-- Map server -->
   <!-- <arg name="map_file" default="$(find agv_main)/maps/lobbyA1.yaml"/> -->
-  <arg name="map_file" default="$(find agv_main)/maps/mapBuild.yaml"/>
+  <!-- <arg name="map_file" default="$(find agv_main)/maps/mapBuild.yaml"/> -->
+  <arg name="map_file" default="$(find agv_main)/maps/mapB4.yaml"/>
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
 
   <!-- sick_lidar_localization -->
@@ -68,8 +69,8 @@
   <include file="$(find plc_fx5uc)/launch/plc.launch"></include>
 
   <!-- rviz -->
-  <!-- <arg name="open_rviz" default="true"/> -->
-  <arg name="open_rviz" default="false"/>
+  <arg name="open_rviz" default="true"/>
+  <!-- <arg name="open_rviz" default="false"/> -->
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find agv_main)/rviz/agv_main.rviz"/>

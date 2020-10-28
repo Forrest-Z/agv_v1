@@ -6,9 +6,7 @@ from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
-# from agv_main.msg import agv_action
-from rospy_message_converter.msg import agv_action
-
+from agv_msgs.msg import agv_action
 
 pub_init_pose = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=10)
 rospy.loginfo("agv_main.py-Publisher topic /initialpose")

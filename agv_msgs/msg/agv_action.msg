@@ -2,14 +2,16 @@ Header header
 uint8 action
 uint8 ACTION_FLOAT          = 0   # 
 uint8 ACTION_MANUAL         = 1   # 
-uint8 ACTION_MOVE_BASE      = 2   # 
-uint8 ACTION_INITIAL_POSE   = 3   # 
-uint8 ACTION_CHARGING_IN    = 4   # 
-uint8 ACTION_CHARGING_OUT   = 5   # 
-uint8 ACTION_LIFT_IN        = 6   # 
-uint8 ACTION_LIFT_UP        = 7   # 
-uint8 ACTION_LIFT_DOWN      = 8   # 
-uint8 ACTION_LIFT_OUT       = 9   # 
+uint8 ACTION_INITIAL_POSE   = 2   # 
+uint8 ACTION_QUALITY_POSE   = 3   #
+uint8 ACTION_ROTATE_GOAL    = 4   # 
+uint8 ACTION_MOVE_GOAL      = 5   #  
+uint8 ACTION_CHARGING_IN    = 6   # 
+uint8 ACTION_CHARGING_OUT   = 7   # 
+uint8 ACTION_LIFT_IN        = 8   # 
+uint8 ACTION_LIFT_UP        = 9   # 
+uint8 ACTION_LIFT_DOWN      = 10  # 
+uint8 ACTION_LIFT_OUT       = 11  # 
 
 uint8 status
 uint8 STATUS_PENDING         = 0   # The goal has yet to be processed by the action server

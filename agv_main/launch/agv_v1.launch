@@ -8,7 +8,8 @@
   <arg name="host_ip"             default="192.168.1.255"/>
   <arg name="host_udp_port_front" default="6060" />
   <arg name="host_udp_port_back"  default="6061" />  
-  <arg name="angle_start_front"   default="-2" />
+  <!-- <arg name="angle_start_front"   default="-2" /> -->
+  <arg name="angle_start_front"   default="-0.1" /> 
   <arg name="angle_end_front"     default="2" />
   <arg name="angle_start_back"    default="-2" />
   <arg name="angle_end_back"      default="2" />
@@ -53,9 +54,9 @@
     <arg name="move_forward_only" value="$(arg move_forward_only)"/>
   </include>
 
-  <!-- <include file="$(find linefolowing)/launch/linefolowingRun.launch">
-    <arg name="yaml" value="consept_rb.yaml"/>
-  </include> -->
+  <include file="$(find linefolowing)/launch/linefolowingRun.launch">
+    <arg name="yaml" value="concept_rb.yaml"/>
+  </include>
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"></include>
 
@@ -69,11 +70,15 @@
   <include file="$(find plc_fx5uc)/launch/plc.launch"></include>
 
   <!-- rviz -->
-  <arg name="open_rviz" default="true"/>
-  <!-- <arg name="open_rviz" default="false"/> -->
+  <!-- <arg name="open_rviz" default="true"/> -->
+  <arg name="open_rviz" default="false"/>
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find agv_main)/rviz/agv_main.rviz"/>
   </group>
+
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diag_agg" args="CPP" output="log" >
+    <rosparam command="load" file="$(find agv_main)/diagnostics/pr2_analyzers.yaml" />
+  </node>
   
 </launch>

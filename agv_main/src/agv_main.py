@@ -5,6 +5,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
+from move_base_msgs.msg import MoveBaseActionResult
 
 from agv_msgs.msg import agv_action
 
@@ -19,57 +20,68 @@ rospy.loginfo("agv_main.py-Publisher topic /lift_action")
 pub_move_base_goal = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=10)
 rospy.loginfo("agv_main.py-Publisher topic /move_base_simple/goal")
 
+pub_action_status = rospy.Publisher('action_status', agv_action, queue_size=10)
+rospy.loginfo("agv_main.py-Publisher topic /action_status")
+
+action_ = 0
+action_id_ = ""
+
 def actionMode(argument):
     switcher = {
-        0: "ACTION_FLOAT",
-        1: "ACTION_MANUAL",
-        2: "ACTION_MOVE_BASE",
-        3: "ACTION_INITIAL_POSE",
-        4: "ACTION_CHARGING_IN",
-        5: "ACTION_CHARGING_OUT",
-        6: "ACTION_LIFT_IN",
-        7: "ACTION_LIFT_UP",
-        8: "ACTION_LIFT_DOWN",
-        9: "ACTION_LIFT_OUT"
+        0:  "ACTION_FLOAT",
+        1:  "ACTION_MANUAL",
+        2:  "ACTION_INITIAL_POSE",
+        3:  "ACTION_QUALITY_POSE",
+        4:  "ACTION_ROTATE_GOAL",
+        5:  "ACTION_MOVE_GOAL",
+        6:  "ACTION_CHARGING_IN",
+        7:  "ACTION_CHARGING_OUT",
+        8:  "ACTION_LIFT_IN",
+        9:  "ACTION_LIFT_UP",
+        10: "ACTION_LIFT_DOWN",
+        11: "ACTION_LIFT_OUT"
     }
     return switcher.get(argument, "Invalid action")
 
 def initialAgvAction(msg):
-    rospy.loginfo("agv_main.py-initialAgvAction()")   
-    # typeData = "geometry_msgs/PoseStamped"
-    # message = PoseStamped({"header": {"stamp": {"secs": 0, "nsecs": 0}, "frame_id": "", "seq": 1}, "pose": {"position": {"y": 0.0, "x": 0.0, "z": 0.0}, "orientation": {"y": 0.0, "x": 0.0, "z": 0.0, "w": 0.0}}})
-    # data = json_message_converter.convert_ros_message_to_json(message)
+    rospy.loginfo("agv_main.py-initialAgvAction()") 
+    global action_, action_id_
+    action_ = msg.action
+    action_id_ = msg.action_id
+    action_mode = actionMode(msg.action)
 
-    action = msg.action
-    typeData = msg.type
-    data = msg.data
-    rospy.loginfo("agv_main.py-data: " + str(data))
-    message = json_message_converter.convert_json_to_ros_message(typeData, data)
-    rospy.loginfo("agv_main.py-type: %s", typeData)
-    # rospy.loginfo("agv_main.py-message: %s", message)
-    # rospy.loginfo("agv_main.py-action: " + str(action))
-    action_mode = actionMode(action)
     rospy.loginfo("agv_main.py-action_mode: " + str(action_mode))
     if (action_mode == "ACTION_FLOAT"):
         floatFunction()
     elif (action_mode == "ACTION_MANUAL"):
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
         manualFunction(message)
-    elif (action_mode == "ACTION_MOVE_BASE"):
-        navigationFunction(message)
     elif (action_mode == "ACTION_INITIAL_POSE"):
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
         initPoseFunction(message)
+    elif (action_mode == "ACTION_QUALITY_POSE"):
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
+        qualityPoseFunction(message)
+    elif (action_mode == "ACTION_ROTATE_GOAL"):
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
+        moveGoalFunction(message)
+    elif (action_mode == "ACTION_MOVE_GOAL"):
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
+        moveGoalFunction(message)
     elif (action_mode == "ACTION_CHARGING_IN"):
-        chargingInFunction(msg)
+        lineInFunction(msg)
     elif (action_mode == "ACTION_CHARGING_OUT"):
-        chargingOutFunction(msg)
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
+        moveGoalFunction(message)
     elif (action_mode == "ACTION_LIFT_IN"):
-        liftInFunction(msg)
+        lineInFunction(msg)
     elif (action_mode == "ACTION_LIFT_UP"):
-        liftUpFunction(msg)
+        liftFunction(msg)
     elif (action_mode == "ACTION_LIFT_DOWN"):
-        liftDownFunction(msg)
+        liftFunction(msg)
     elif (action_mode == "ACTION_LIFT_OUT"):
-        liftOutFunction(msg)
+        message = json_message_converter.convert_json_to_ros_message(msg.type, msg.data)
+        moveGoalFunction(message)
 
 def floatFunction():
     print ("agv_main.py-Do Nothing")
@@ -78,45 +90,75 @@ def manualFunction(msg):
     global pub_cmd_vel
     pub_cmd_vel.publish(msg)
     rospy.loginfo("agv_main.py-pub_cmd_vel")
-def navigationFunction(msg):
-    print ("agv_main.py-navigationFunction")
+def qualityPoseFunction():
+    print ("agv_main.py-qualityPoseFunction()")
+def moveGoalFunction(msg):
+    print ("agv_main.py-moveGoalFunction")
     global pub_move_base_goal
+    pubActionStatus(msg, 1)
     pub_move_base_goal.publish(msg)
     rospy.loginfo("agv_main.py-pub_move_base_goal")
 def initPoseFunction(msg):
     print ("agv_main.py-initPoseFunction")
     global pub_init_pose
+    pubActionStatus(msg, 1)
     initPose = PoseWithCovarianceStamped()
     initPose.header = msg.header
     initPose.pose.pose = msg.pose
     pub_init_pose.publish(initPose)
-def chargingInFunction(msg):
-    print ("agv_main.py-chargingInFunction")
+def lineInFunction(msg):
+    print ("agv_main.py-lineInFunction")
     global pub_charging
+    pubActionStatus(msg, 1)
     pub_charging.publish(msg)
     rospy.loginfo("agv_main.py-publish chargingIn: " + str(msg))
-def chargingOutFunction(msg):
-    print ("agv_main.py-chargingOutFunction")
-    global pub_charging
-    pub_charging.publish(msg)
-    rospy.loginfo("agv_main.py-publish chargingOut: " + str(msg))
-def liftInFunction():
-    print ("agv_main.py-liftInFunction")
-def liftUpFunction(msg):
+def liftFunction(msg):
     print ("agv_main.py-liftUpFunction")
     global pub_lift
+    pubActionStatus(msg, 1)
     pub_lift.publish(msg)
-def liftDownFunction(msg):
-    print ("agv_main.py-liftDownFunction")
-    global pub_lift
-    pub_lift.publish(msg)
-def liftOutFunction():
-    print ("agv_main.py-liftOutFunction")
+
+
+def moveResult(msg):
+    rospy.loginfo("agv_main.py-moveResult()")
+    status_ = msg.status.status
+    pubActionStatus(msg, status_)
+
+def liftResult(msg):
+    rospy.loginfo("agv_main.py-liftResult()")
+    status_ = msg.status
+    pubActionStatus(msg, status_)
+
+def chargingResult(msg):
+    rospy.loginfo("agv_main.py-chargingResult()")
+    status_ = msg.status
+    pubActionStatus(msg, status_)
+
+def pubActionStatus(msg, status):
+    global pub_action_status, action_, action_id_
+    action_status_ = agv_action()
+    # action_status_.header = msg.header
+    action_status_.action = action_
+    action_status_.status = status
+    action_status_.action_id = action_id_
+
+    # rospy.loginfo("agv_main.py-action_status: " + str(action_status_))
+    pub_action_status.publish(action_status_)
+    rospy.loginfo("agv_main.py-publish action_status: " + str(action_status_))
 
 if __name__ == '__main__':
     rospy.init_node('agv_main', log_level=rospy.DEBUG)
 
     rospy.Subscriber("agv_action", agv_action, initialAgvAction)
     rospy.loginfo("agv_main.py-Subscriber topic /agv_action")
+
+    rospy.Subscriber("/move_base/result", MoveBaseActionResult, moveResult)
+    rospy.loginfo("agv_main.py-Subscriber topic /move_base/result")
+
+    rospy.Subscriber("/lift_status", agv_action, liftResult)
+    rospy.loginfo("agv_main.py-Subscriber topic /lift_status")
+
+    rospy.Subscriber("/charging_status", agv_action, chargingResult)
+    rospy.loginfo("agv_main.py-Subscriber topic /charging_status")
 
     rospy.spin()

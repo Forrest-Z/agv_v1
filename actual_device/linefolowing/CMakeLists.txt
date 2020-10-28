@@ -11,10 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
    FILES
-   MLS_Measurement.msg
    speed_wheel.msg
-   agv_action.msg
- )
+   MLS_Measurement.msg
+#   agv_action.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(

@@ -69,15 +69,11 @@ namespace move_base {
     {
     ROS_INFO("move_base.cpp-62-MoveBase()");
 
-    // as_ = new MoveBaseActionServer(ros::NodeHandle(), "move_base", boost::bind(&MoveBase::executeCb, this, _1), false);
-    as_ = new MoveBaseActionServer(ros::NodeHandle(), "move_base", boost::bind(&MoveBase::myExecute, this, _1), false);  //TungNV
-
     ros::NodeHandle n("");
 
     ///// Add by TungNV ////////////////////////////////////////////////////////////////////////////////////////////////
-    //Subscribe the topic /client_count
-    // mode_ = n.subscribe<std_msgs::Int32>("client_count", 1, boost::bind(&MoveBase::getMode, this, _1));
-    // ROS_INFO("move_base.cpp-82-Subscriber topic: /client_count");
+    as_ = new MoveBaseActionServer(ros::NodeHandle(), "move_base", boost::bind(&MoveBase::executeCb, this, _1), false);
+    // as_ = new MoveBaseActionServer(ros::NodeHandle(), "move_base", boost::bind(&MoveBase::myExecute, this, _1), false);  //TungNV
 
     //Subscribe the topic /sick_lidar_localization/driver/result_telegrams
     pose_ = n.subscribe<sick_lidar_localization::SickLocResultPortTelegramMsg>("sick_lidar_localization/driver/result_telegrams", 1, boost::bind(&MoveBase::getCurrentPose, this, _1));
@@ -86,27 +82,10 @@ namespace move_base {
     //Subscribe the topic /initialpose
     initial_pose_sub_ = n.subscribe("initialpose", 2, &MoveBase::initialPoseReceived, this);
     ROS_INFO("move_base.cpp-85-Subscriber topic: /initialpose");
-
-    //Subscribe the topic /agv_action
-    // agv_action_ = n.subscribe("agv_action", 2, &MoveBase::initialAgvAction, this);
-    // ROS_INFO("move_base.cpp-85-Subscriber topic: /agv_action");
     
     // Publish the topic /current_pose
     current_pose_pub_ = n.advertise<geometry_msgs::PoseStamped>("current_pose", 0);
     ROS_INFO("move_base.cpp-93-Publish topic: /current_pose");
-
-    // // Subscriber the service: lift_up_
-    // lift_up_client_ = n.serviceClient<move_base::lift_up>("lift_up_");
-    // ROS_INFO("move_base.cpp-100-Call service: lift_up_");
-    // // Subscriber the service: lift_down_
-    // lift_down_client_ = n.serviceClient<move_base::lift_up>("lift_down_");
-    // ROS_INFO("move_base.cpp-103-Call service: lift_down_");
-    // // Subscriber the service: charging_in_
-    // charging_in_client_ = n.serviceClient<move_base::lift_up>("charging_in_");
-    // ROS_INFO("move_base.cpp-106-Call service: charging_in_");
-    // // Subscriber the service: charging_out_
-    // charging_out_client_ = n.serviceClient<move_base::lift_up>("charging_out_");
-    // ROS_INFO("move_base.cpp-109-Call service: charging_out_");
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ros::NodeHandle private_nh("~");
@@ -346,9 +325,9 @@ namespace move_base {
     ROS_DEBUG_NAMED("move_base","In ROS goal callback, wrapping the PoseStamped in the action message and re-sending to the server.");
     move_base_msgs::MoveBaseActionGoal action_goal;
     action_goal.header.stamp = ros::Time::now();
-    std::stringstream ss;
-    ss << "goal-webapp-" << goal->header.stamp;
-    action_goal.goal_id.id = ss.str();
+    // std::stringstream ss;
+    // ss << "goal-webapp-" << goal->header.stamp;
+    // action_goal.goal_id.id = ss.str();
     
     action_goal.goal.target_pose = *goal;
 

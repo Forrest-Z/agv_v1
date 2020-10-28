@@ -4,7 +4,7 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <ros/ros.h>
-#include "plc_fx5uc/agv_action.h"
+#include "agv_msgs/agv_action.h"
 
 using namespace std;
 
@@ -18,35 +18,23 @@ using namespace std;
 #define WHITE  7
 
 bool isLiftUp = false;
+bool isLiftDown = true;
+uint8_t action_ = 0;
 
-void liftActionCallback(const plc_fx5uc::agv_action& msg)
+void liftActionCallback(const agv_msgs::agv_action& msg)
 {
 	ROS_INFO("fx5uc_controller.cpp-21-liftActionCallback()");
-	uint8_t action_ = msg.action;
-	// linefolowing::agv_action status = ActionState(action_);
+	action_ = msg.action;
     switch(action_){
-      case 0:
-        break;
-      case 1:
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-      case 4:	  
-        break;
-      case 5:
-        break;
-      case 6:
-        break;
-      case 7:
+      case 9:
         isLiftUp = true;
-        // ROS_INFO("fx5uc_controller.cpp-45- Start LIFT UP");
+        isLiftDown = false;
+        ROS_INFO("fx5uc_controller.cpp-34- isLiftUp = true");
         break;
-      case 8:
-        // if(bitM_echo[14] == OFF) bitM_pub[14] = ON;
+      case 10:
         isLiftUp = false;
-        // ROS_INFO("fx5uc_controller.cpp-49- Start LIFT DOWN");
+        isLiftDown = true;
+        ROS_INFO("fx5uc_controller.cpp-34- isLiftUp = false");
         break;
       default:
       {}
@@ -55,35 +43,36 @@ void liftActionCallback(const plc_fx5uc::agv_action& msg)
 
 int main(int argc, char **argv)
 {
-    /* create a modbus object */
-    modbus *fx5uc = new modbus("192.168.1.51", 502);
-    /* set slave id */
-    fx5uc->modbus_set_slave_id(1);
-    /* connect with the server */
-    fx5uc->modbus_connect();  
-    /* create hardware */
-    FX5U_series device;
-    /* create ros ndoe */
-    ros::init(argc, argv, "PLC_control");
-    ros::NodeHandle nh;
-    ros::Rate loop_rate(20);
-    /* Publisher */
-    ros::Publisher cmd_PLC;
-    cmd_PLC = nh.advertise<diagnostic_msgs::DiagnosticStatus>("PLC_infomation", 20);
+  /* create a modbus object */
+  modbus *fx5uc = new modbus("192.168.1.51", 502);
+  /* set slave id */
+  fx5uc->modbus_set_slave_id(1);
+  /* connect with the server */
+  fx5uc->modbus_connect();  
+  /* create hardware */
+  FX5U_series device;
+  /* create ros ndoe */
+  ros::init(argc, argv, "PLC_control");
+  ros::NodeHandle nh;
+  ros::Rate loop_rate(20);
+  /* Publisher */
+  ros::Publisher cmd_PLC;
+  cmd_PLC = nh.advertise<diagnostic_msgs::DiagnosticStatus>("PLC_infomation", 20);
 
-    diagnostic_msgs::DiagnosticArray dir_array;
-	  diagnostic_msgs::DiagnosticStatus PLC;
-    diagnostic_msgs::KeyValue LED;
-    diagnostic_msgs::KeyValue Dock;
-    diagnostic_msgs::KeyValue Xilanh;
+  diagnostic_msgs::DiagnosticArray dir_array;
+  diagnostic_msgs::DiagnosticStatus PLC;
+  diagnostic_msgs::KeyValue LED;
+  diagnostic_msgs::KeyValue Dock;
+  diagnostic_msgs::KeyValue Xilanh;
 
-    PLC.name = "PLC-Fx5UC";
+  PLC.name = "PLC-Fx5UC";
 	PLC.hardware_id = "192.168.1.51:502";
 
-    bool bitM_echo[300];
-    bool bitM_pub[100];
+  bool bitM_echo[300];
+  bool bitM_pub[100];
     
 	ros::Subscriber action = nh.subscribe("lift_action", 20, liftActionCallback);
+  ros::Publisher lift_status_pub = nh.advertise<agv_msgs::agv_action>("lift_status", 1000);
 
     while(ros::ok())
     {   
@@ -113,13 +102,29 @@ int main(int argc, char **argv)
                 bitM_pub[1] = ON;bitM_pub[2] = OFF;bitM_pub[3] = OFF;
             }
             bitM_pub[16] = ON;  // nang xilanh
-            if(isLiftUp == true && bitM_echo[200] == ON){            
-              ROS_INFO("fx5uc_controller.cpp-49- Start LIFT UP M201 = ",bitM_echo[201]);
+            if((isLiftUp == true) && (isLiftDown == false)){   
+              //  ROS_INFO("fx5uc_controller.cpp-49- Start LIFT UP M12 = %d M200 = %d",bitM_echo[12],bitM_echo[200]);      
               bitM_pub[12] = ON;  // LIFT_UP
+              bitM_pub[14] = OFF;  // LIFT_DOWN
+              if(bitM_echo[201] == ON){
+                isLiftUp = false;
+                agv_msgs::agv_action lift_action;
+                lift_action.action = action_;
+                lift_action.status = 3;
+                lift_status_pub.publish(lift_action);
+              } 
             }
-            if(isLiftUp == false && bitM_echo[201] == ON){
-              ROS_INFO("fx5uc_controller.cpp-49- Start LIFT DOWN M200 = %d",bitM_echo[200]);
+            if((isLiftUp == false)&& (isLiftDown == true)){
+              //  ROS_INFO("fx5uc_controller.cpp-49- Start LIFT DOWN M14 = %d M201 = %d",bitM_echo[14],bitM_echo[201]);
               bitM_pub[14] = ON;  // LIFT_DOWN
+              bitM_pub[12] = OFF;  // LIFT_DOWN
+              if(bitM_echo[200] == ON){
+                isLiftDown = false;
+                agv_msgs::agv_action lift_action;
+                lift_action.action = action_;
+                lift_action.status = 3;
+                lift_status_pub.publish(lift_action);
+              } 
             }
             
         //     ///// Add by DuNV

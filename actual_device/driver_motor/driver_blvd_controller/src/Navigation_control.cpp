@@ -24,7 +24,7 @@ uint8_t action_ ;
 
 void actionCallback(const agv_msgs::agv_action& msg)
 {
-	ROS_INFO("Navigation_control.cpp-26-actionCallback()");
+	ROS_INFO("Navigation_control.cpp-26-actionCallback()-action: %d", msg.action);
   action_ = msg.action;
 	// linefolowing::agv_action status = ActionState(action_);
     // switch(action_){

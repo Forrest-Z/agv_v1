@@ -90,7 +90,7 @@ namespace carrot_planner {
 
 
   bool CarrotPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& plan){
-    ROS_INFO("carrot_planner.cpp-93-makePlan");
+    // ROS_INFO("carrot_planner.cpp-93-makePlan");
 
     if(!initialized_){
       ROS_ERROR("carrot_planner.cpp-96-The planner has not been initialized, please call initialize() to use the planner");

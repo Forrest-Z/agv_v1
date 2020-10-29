@@ -166,7 +166,7 @@ void LayeredCostmap::updateMap(double robot_x, double robot_y, double robot_yaw)
 
 bool LayeredCostmap::isCurrent()
 {
-  ROS_INFO("layered_costmap.cpp-168-isCurrent");
+  // ROS_INFO("layered_costmap.cpp-168-isCurrent");
   current_ = true;
   for (vector<boost::shared_ptr<Layer> >::iterator plugin = plugins_.begin(); plugin != plugins_.end();
       ++plugin)

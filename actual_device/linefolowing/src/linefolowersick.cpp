@@ -77,7 +77,7 @@ ros::Publisher charger_status_pub;
 
 void chargerActionCallback(const agv_msgs::agv_action& msg)
 {
-	ROS_INFO("linefolowersick.cpp-55-actionCallback()");
+	ROS_INFO("linefolowersick.cpp-80-actionCallback()");
 	action_ = msg.action;
 	// linefolowing::agv_action status = ActionState(action_);
     switch(action_){
@@ -167,7 +167,7 @@ void mlsCallback(const linefolowing::MLS_Measurement& msg)
 			charging_action.action = action_;
 			charging_action.status = 3;
 			charger_status_pub.publish(charging_action);
-			ROS_INFO("linefolwersick.cpp-148: Publish result");	
+			ROS_INFO("linefolwersick.cpp-170: Publish result");	
 			// ROS_INFO("linefolwersick.cpp-168: Vung 3, stop  dir = %d", direct);	
 			for(int i = 0; i<0; i++) ROS_INFO(" ");
 		}
@@ -176,13 +176,13 @@ void mlsCallback(const linefolowing::MLS_Measurement& msg)
 			if(msg.position[0] == 0.00)
 			{
 				present_speed_setting = 1;
-				ROS_INFO("linefolwersick.cpp-175: Vung 1, run, dir = %d", direct);	
+				ROS_INFO("linefolwersick.cpp-179: Vung 1, run, dir = %d", direct);	
 				for(int i = 0; i<0; i++) ROS_INFO(" ");
 			}
 			else if(msg.position[0] < 0.00)
 			{
 				present_speed_setting = 0.32;
-				ROS_INFO("linefolwersick.cpp-180: Vung 0, giam toc, dir = %d", direct);	 	
+				ROS_INFO("linefolwersick.cpp-185: Vung 0, giam toc, dir = %d", direct);	 	
 				for(int i = 0; i<0; i++) ROS_INFO(" ");
 			}
 		}
@@ -218,6 +218,12 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;	
 	ros::Rate loop_rate(20);
 	linefolowing::speed_wheel robot;
+
+	// system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
+ 	ROS_INFO("linefolowersick.cpp-222-sudo ip link set can0 type can");	
+	system("sudo ip link set can0 type can");
+ 	ROS_INFO("linefolowersick.cpp-225-sudo ip link set can0 up type can bitrate 125000");	
+	system("sudo ip link set can0 up type can bitrate 125000");
 
 	//Open and initialize the serial port to the uController
   	if (argc > 1) 
@@ -265,7 +271,7 @@ int main(int argc, char **argv)
 	sprintf(param,"/consept_mls%d/K",ucIndex);
   	n.getParam(param,K);
 
- 	ROS_INFO("MLS line sick %d starting",ucIndex);	
+ 	ROS_INFO("linefolowersick.cpp-274-MLS line sick %d starting",ucIndex);	
 
 	/* Publisher */
 	speedwheel = n.advertise<linefolowing::speed_wheel>("cmd_vel_to_wheel", 20);
@@ -301,14 +307,14 @@ int main(int argc, char **argv)
 				{
 					robot.wheel_letf  = W_l*direct;
 					robot.wheel_right = W_r*direct*(-1);
-					if(status.track_level <= 3 && status.track_level > 0) ROS_WARN("From MLS%d: track too weak!!",ucIndex);
+					if(status.track_level <= 3 && status.track_level > 0) ROS_WARN("linefolowersick.cpp-310-From MLS%d: track too weak!!",ucIndex);
 				}else 
 					{
-						ROS_ERROR("From MLS%d: no track!!", ucIndex);
+						ROS_ERROR("linefolowersick.cpp-313-From MLS%d: no track!!", ucIndex);
 						robot.wheel_letf = 0;
 						robot.wheel_right = 0;
 					}
-				ROS_INFO("Banh trai = %d Banh phai = %d",robot.wheel_letf, robot.wheel_right);
+				ROS_INFO("linefolowersick.cpp-317-Banh trai = %d Banh phai = %d",robot.wheel_letf, robot.wheel_right);
 				speedwheel.publish(robot);
 			}
 			loop_rate.sleep();

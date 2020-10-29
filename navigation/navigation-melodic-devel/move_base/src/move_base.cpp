@@ -530,7 +530,7 @@ namespace move_base {
   }
 
   bool MoveBase::makePlan(const geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& plan){
-    ROS_INFO("move_base.cpp-512-makePlan");
+    // ROS_INFO("move_base.cpp-512-makePlan");
     boost::unique_lock<costmap_2d::Costmap2D::mutex_t> lock(*(planner_costmap_ros_->getCostmap()->getMutex()));
 
     //make sure to set the plan to be empty initially
@@ -658,7 +658,7 @@ namespace move_base {
       geometry_msgs::PoseStamped temp_goal = planner_goal_;
       lock.unlock();
       ROS_DEBUG_NAMED("move_base_plan_thread","Planning...");
-      ROS_INFO("move_base.cpp-633-Planning...");
+      // ROS_INFO("move_base.cpp-633-Planning...");
 
       //run planner
       planner_plan_->clear();
@@ -666,7 +666,7 @@ namespace move_base {
 
       if(gotPlan){
         ROS_DEBUG_NAMED("move_base_plan_thread","Got Plan with %zu points!", planner_plan_->size());
-        ROS_INFO("move_base.cpp-642-Got Plan with %zu points!", planner_plan_->size());
+        // ROS_INFO("move_base.cpp-642-Got Plan with %zu points!", planner_plan_->size());
         //pointer swap the plans under mutex (the controller will pull from latest_plan_)
         std::vector<geometry_msgs::PoseStamped>* temp_plan = planner_plan_;
 
@@ -678,7 +678,7 @@ namespace move_base {
         new_global_plan_ = true;
 
         ROS_DEBUG_NAMED("move_base_plan_thread","Generated a plan from the base_global_planner");
-        ROS_INFO("move_base.cpp-653-Generated a plan from the base_global_planner");
+        // ROS_INFO("move_base.cpp-653-Generated a plan from the base_global_planner");
 
         //make sure we only start the controller if we still haven't reached the goal
         if(runPlanner_)
@@ -1231,7 +1231,8 @@ namespace move_base {
 
   double MoveBase::distance(const geometry_msgs::PoseStamped& p1, const geometry_msgs::PoseStamped& p2)
   {
-    ROS_INFO("move_base.cpp-11178-distance()");
+    // ROS_INFO("move_base.cpp-11178-distance()");
+
     // ROS_INFO("move_base.cpp-1149-p1.pose.position.x: %f", p1.pose.position.x);
     // ROS_INFO("move_base.cpp-1149-p2.pose.position.x: %f", p2.pose.position.x);
     // ROS_INFO("move_base.cpp-1149-p1.pose.position.y: %f", p1.pose.position.y);
@@ -1240,7 +1241,7 @@ namespace move_base {
   }
 
   bool MoveBase::executeCycle(geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& global_plan){
-    ROS_INFO("move_base.cpp-1189-executeCycle()");
+    // ROS_INFO("move_base.cpp-1189-executeCycle()");
     // ROS_INFO("move_base.cpp-1190-goal.x=%.2f, goal.y=%.2f, goal.z=%.2f, goal.w=%.2f", goal.pose.position.x, goal.pose.position.y, goal.pose.orientation.z, goal.pose.orientation.w);
     boost::recursive_mutex::scoped_lock ecl(configuration_mutex_);
     //we need to be able to publish velocity commands
@@ -1279,7 +1280,7 @@ namespace move_base {
 
     //if we have a new plan then grab it and give it to the controller
     if(new_global_plan_){
-      ROS_INFO("move_base.cpp-1188-new_global_plan_ = true");
+      // ROS_INFO("move_base.cpp-1188-new_global_plan_ = true");
       //make sure to set the new plan flag to false
       new_global_plan_ = false;
 
@@ -1609,7 +1610,7 @@ namespace move_base {
 
   bool MoveBase::getRobotPose(geometry_msgs::PoseStamped& global_pose, costmap_2d::Costmap2DROS* costmap)
   {
-    ROS_INFO("move_base.cpp-1517-getRobotPose");
+    // ROS_INFO("move_base.cpp-1517-getRobotPose");
 
     tf2::toMsg(tf2::Transform::getIdentity(), global_pose.pose);
     geometry_msgs::PoseStamped robot_pose;

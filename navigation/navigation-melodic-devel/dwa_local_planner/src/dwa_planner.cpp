@@ -202,7 +202,7 @@ namespace dwa_local_planner {
   }
 
   bool DWAPlanner::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan) {
-    ROS_INFO("dwa_planner.cpp-205-setPlan");
+    // ROS_INFO("dwa_planner.cpp-205-setPlan");
     oscillation_costs_.resetOscillationFlags();
     return planner_util_->setPlan(orig_global_plan);
   }
@@ -212,7 +212,7 @@ namespace dwa_local_planner {
    * but the cost functions for obstacles are to be reused.
    */
   bool DWAPlanner::checkTrajectory(Eigen::Vector3f pos, Eigen::Vector3f vel, Eigen::Vector3f vel_samples){
-    ROS_INFO("dwa_planner.cpp-215-checkTrajectory");
+    // ROS_INFO("dwa_planner.cpp-215-checkTrajectory");
     oscillation_costs_.resetOscillationFlags();
     base_local_planner::Trajectory traj;
     geometry_msgs::PoseStamped goal_pose = global_plan_.back();
@@ -240,7 +240,7 @@ namespace dwa_local_planner {
     const geometry_msgs::PoseStamped& global_pose, 
     const std::vector<geometry_msgs::PoseStamped>& new_plan,
     const std::vector<geometry_msgs::Point>& footprint_spec) {
-    ROS_INFO("dwa_planner.cpp-243-updatePlanAndLocalCosts");
+    // ROS_INFO("dwa_planner.cpp-243-updatePlanAndLocalCosts");
     global_plan_.resize(new_plan.size());
     for (unsigned int i = 0; i < new_plan.size(); ++i) {
       global_plan_[i] = new_plan[i];

@@ -137,7 +137,7 @@ namespace dwa_local_planner {
   }
   
   bool DWAPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan) {
-    ROS_INFO("dwa_planner_ros.cpp-141-setPlan()");
+    // ROS_INFO("dwa_planner_ros.cpp-141-setPlan()");
     if (! isInitialized()) {
       ROS_ERROR("This planner has not been initialized, please call initialize() before using this planner");
       return false;
@@ -145,12 +145,12 @@ namespace dwa_local_planner {
     //when we get a new plan, we also want to clear any latch we may have on goal tolerances
     latchedStopRotateController_.resetLatching();
 
-    ROS_INFO("dwa_planner_ros.cpp-148-Got new plan");
+    // ROS_INFO("dwa_planner_ros.cpp-148-Got new plan");
     return dp_->setPlan(orig_global_plan);
   }
 
   bool DWAPlannerROS::isGoalReached() {
-    ROS_INFO("dwa_planner_ros.cpp-153-isGoalReached");
+    // ROS_INFO("dwa_planner_ros.cpp-153-isGoalReached");
     if (! isInitialized()) {
       ROS_ERROR("dwa_planner_ros.cpp-155-This planner has not been initialized, please call initialize() before using this planner");
       return false;
@@ -268,7 +268,7 @@ namespace dwa_local_planner {
 
 
   bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel) {
-    ROS_INFO("dwa_planner_ros.cpp-266-computeVelocityCommands");
+    // ROS_INFO("dwa_planner_ros.cpp-266-computeVelocityCommands");
     // dispatches to either dwa sampling control or stop and rotate control, depending on whether we have been close enough to goal
     if ( ! costmap_ros_->getRobotPose(current_pose_)) {
       ROS_ERROR("dwa_planner_ros.cpp-268-Could not get robot pose");

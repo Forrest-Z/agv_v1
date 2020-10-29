@@ -26,27 +26,6 @@ void actionCallback(const agv_msgs::agv_action& msg)
 {
 	ROS_INFO("Navigation_control.cpp-26-actionCallback()-action: %d", msg.action);
   action_ = msg.action;
-	// linefolowing::agv_action status = ActionState(action_);
-    // switch(action_){
-    //   case 0:
-    //     break;
-    //   case 1:
-    //     break;
-    //   case 2:
-    //     break;
-    //   case 3:
-		// 	direct = -1;	  
-    //     break;
-    //   case 4:
-	  // 		direct = 1;
-    //     break;
-    //   case 5:
-    //     break;
-    //   case 6:
-    //     break;
-    //   default:
-    //   {}
-    //}
 }//teleop_keyCallback 
 
 void cmd_velCallback(const geometry_msgs::Twist& msg)

@@ -295,7 +295,7 @@ namespace dwa_local_planner {
       const geometry_msgs::PoseStamped& global_pose,
       const geometry_msgs::PoseStamped& global_vel,
       geometry_msgs::PoseStamped& drive_velocities) {
-    ROS_INFO("dwa_planner.cpp-294-findBestPath");
+    // ROS_INFO("dwa_planner.cpp-294-findBestPath");
     //make sure that our configuration doesn't change mid-run
     boost::mutex::scoped_lock l(configuration_mutex_);
 

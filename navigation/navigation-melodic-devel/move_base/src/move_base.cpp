@@ -1367,7 +1367,7 @@ namespace move_base {
           last_valid_control_ = ros::Time::now();
           //make sure that we send the velocity command to the base
           vel_pub_.publish(cmd_vel);
-          ROS_ERROR("move_base.cpp-1356-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+          ROS_INFO("move_base.cpp-1356-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
           if(recovery_trigger_ == CONTROLLING_R)
             recovery_index_ = 0;
         }

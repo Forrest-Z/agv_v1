@@ -185,7 +185,7 @@ namespace dwa_local_planner {
 
 
   bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &global_pose, geometry_msgs::Twist& cmd_vel) {
-    ROS_INFO("dwa_planner_ros.cpp-189-dwaComputeVelocityCommands");
+    // ROS_INFO("dwa_planner_ros.cpp-189-dwaComputeVelocityCommands");
     // dynamic window sampling approach to get useful velocity commands
     if(! isInitialized()){
       ROS_ERROR("dwa_planner_ros.cpp-191-This planner has not been initialized, please call initialize() before using this planner");

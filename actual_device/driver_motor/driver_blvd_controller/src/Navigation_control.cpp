@@ -108,7 +108,7 @@ int main(int argc, char **argv)
   /*
   * This is a message object. You stuff it with data, and then publish it.
   */
-  if(action_ != 6 && action_ != 7 && action_ != 8 && action_ != 9)
+  if(action_ != 6 && action_ != 8)  // if not Charging in and Lift in
   {
     robot.wheel_letf = W_l;
     robot.wheel_right = -W_r;

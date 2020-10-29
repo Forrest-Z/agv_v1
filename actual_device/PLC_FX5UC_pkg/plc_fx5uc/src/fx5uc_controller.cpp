@@ -75,7 +75,7 @@ int main(int argc, char **argv)
   ros::Publisher lift_status_pub = nh.advertise<agv_msgs::agv_action>("lift_status", 1000);
 
     while(ros::ok())
-    {   
+    {  
         fx5uc->modbus_read_coils(Mbit, 300, bitM_echo);
         fx5uc->modbus_read_coils(PORT1, 7,device.y1);
         if(bitM_echo[0] == ON)// Nếu M0 on 

@@ -156,8 +156,7 @@ void RotateRecovery::runBehavior()
       double footprint_cost = world_model_->footprintCost(x, y, theta, local_costmap_->getRobotFootprint(), 0.0, 0.0);
       if (footprint_cost < 0.0)
       {
-        ROS_ERROR("rotate_recovery.cpp-159-Rotate recovery can't rotate in place because there is a potential collision. Cost: %.2f",
-                  footprint_cost);
+        ROS_ERROR("rotate_recovery.cpp-159-Rotate recovery can't rotate in place because there is a potential collision. Cost: %.2f", footprint_cost);
         return;
       }
 

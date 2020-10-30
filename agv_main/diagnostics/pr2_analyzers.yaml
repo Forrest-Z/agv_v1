@@ -1,12 +1,10 @@
 pub_rate: 0.5
 analyzers:
-  drivers:
+  agv:
     type: diagnostic_aggregator/AnalyzerGroup
-    path: Motor driver
-    analyzers: 
-      bldv20km:
+    path: Slam Agv
+    analyzers:
+      drivers:
         type: diagnostic_aggregator/GenericAnalyzer
-        path: Oriental_BLVD20KM
-        find_and_remove_prefix: bldv20km_node
-        timeout: 5.0
-        num_items: 2
+        path: Motor driver
+        startswith: Oriental_BLVD20KM

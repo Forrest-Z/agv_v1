@@ -52,9 +52,6 @@
 
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
-// #include <move_base/agv_action.h>
-// #include <move_base/lift_up.h>
-
 namespace move_base {
 
   MoveBase::MoveBase(tf2_ros::Buffer& tf) :
@@ -283,10 +280,8 @@ namespace move_base {
 
         lock.unlock();
       } catch (const pluginlib::PluginlibException& ex) {
-        ROS_FATAL("Failed to create the %s planner, are you sure it is properly registered and that the \
-                   containing library is built? Exception: %s", config.base_global_planner.c_str(), ex.what());
-        ROS_ERROR("move_base.cpp-278-Failed to create the %s planner, are you sure it is properly registered and that the \
-                   containing library is built? Exception: %s", config.base_global_planner.c_str(), ex.what());
+        ROS_FATAL("Failed to create the %s planner, are you sure it is properly registered and that the containing library is built? Exception: %s", config.base_global_planner.c_str(), ex.what());
+        ROS_ERROR("move_base.cpp-278-Failed to create the %s planner, are you sure it is properly registered and that the containing library is built? Exception: %s", config.base_global_planner.c_str(), ex.what());
         planner_ = old_planner;
         config.base_global_planner = last_config_.base_global_planner;
       }

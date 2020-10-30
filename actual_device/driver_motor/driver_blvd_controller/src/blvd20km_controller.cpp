@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 	ros::Time a_little_after_the_beginning(0, 1000000);
 	timer.frame_id = "driverID";
 
-	std::string Char_name = "/Oriental_BLVD20KM_";
+	std::string Char_name = "/Motor driver/Oriental_BLVD20KM/Driver ";
 	Driver.name = Char_name + std::to_string(ID);
 	Driver.hardware_id = std::to_string(ID);
 

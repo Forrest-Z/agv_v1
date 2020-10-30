@@ -1,8 +1,12 @@
 pub_rate: 0.5
 analyzers:
-  power:
-    type: diagnostic_aggregator/GenericAnalyzer
-    path: 'Power System'
-    timeout: 2.0
-    startswith: [ 'Smart Battery', 'Power board']
-    expected: [ 'IBPS 1', 'IBPS 2',]
+  drivers:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Motor driver
+    analyzers: 
+      bldv20km:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Oriental_BLVD20KM
+        find_and_remove_prefix: bldv20km_node
+        timeout: 5.0
+        num_items: 2

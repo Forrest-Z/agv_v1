@@ -59,6 +59,7 @@ void ClearCostmapRecovery::initialize(std::string name, tf2_ros::Buffer* tf,
     ros::NodeHandle private_nh("~/" + name_);
 
     private_nh.param("reset_distance", reset_distance_, 3.0);
+    // private_nh.param("reset_distance", reset_distance_, 2.0);
     private_nh.param("force_updating", force_updating_, false);
     private_nh.param("affected_maps", affected_maps_, std::string("both"));
     if (affected_maps_ != "local" && affected_maps_ != "global" && affected_maps_ != "both")
@@ -95,8 +96,7 @@ void ClearCostmapRecovery::runBehavior(){
     return;
   }
 
-  ROS_WARN("clear_costmap_recovery.cpp-98-Clearing %s costmap%s to unstuck robot (%.2fm).", affected_maps_.c_str(),
-           affected_maps_ == "both" ? "s" : "", reset_distance_);
+  ROS_WARN("clear_costmap_recovery.cpp-98-Clearing %s costmap%s to unstuck robot (%.2fm).", affected_maps_.c_str(), affected_maps_ == "both" ? "s" : "", reset_distance_);
 
   ros::WallTime t0 = ros::WallTime::now();
   if (affected_maps_ == "global" || affected_maps_ == "both")

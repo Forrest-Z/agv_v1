@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import os
 from rospy_message_converter import json_message_converter
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
@@ -148,6 +149,10 @@ def pubActionStatus(msg, status):
 
 if __name__ == '__main__':
     rospy.init_node('agv_main', log_level=rospy.DEBUG)
+
+    os.system('sudo ip link set can0 type can')
+    os.system('sudo ip link set can0 up type can bitrate 125000')
+    rospy.loginfo("agv_main.py-Config Can port")
 
     rospy.Subscriber("agv_action", agv_action, initialAgvAction)
     rospy.loginfo("agv_main.py-Subscriber topic /agv_action")

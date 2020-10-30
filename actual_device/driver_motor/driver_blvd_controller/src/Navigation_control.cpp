@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     robot.wheel_letf = W_l;
     robot.wheel_right = -W_r;
     Navigation_control.publish(robot);
-    // ROS_INFO("Navigation_control.cpp-115- Publish to driver - Wheel left: %d  Wheel right: %d", robot.wheel_letf, robot.wheel_right);
+    // ROS_INFO("Navigation_control.cpp-95- Publish to driver - Wheel left: %d  Wheel right: %d", robot.wheel_letf, robot.wheel_right);
   }
     // if((clock() - start)/CLOCKS_PER_SEC >= timeoutMs) 
     //     W_r = W_l= 0;

@@ -5,6 +5,7 @@
 #include "mbrtu/modbusrtu.h"
 #include <geometry_msgs/Twist.h>
 #include <boost/thread/thread.hpp>
+#include <std_msgs/Header.h>
 #include <diagnostic_msgs/KeyValue.h>
 #include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
@@ -29,17 +30,7 @@ ros::Subscriber navigation;
 void speedWheelCallback(const driver_blvd_controller::speed_wheel& robot)
 {
 	speed[0] = robot.wheel_letf;
-    speed[1] = robot.wheel_right;
-
-    // if(check_connect == 0)
-    // {
-    // 	ROS_INFO("Connected ");
-	//     for(int i= 0; i<3; i++) ROS_INFO("  ");
-	//     ROS_INFO("Command speed :  %d ", speed[ID -1]);
-	// 	ROS_INFO("Feedback speed:  %d ",(int16_t)feedback_speed[ID -1]);
-	// 	ROS_INFO("Warning record:  %x ",warning_status[ID -1]);
-	// 	ROS_INFO("Alarm record  :  %x ",alarm_status[ID -1]);
-    // } 
+  speed[1] = robot.wheel_right;
 } //navigationCallback
 
 int main(int argc, char **argv)
@@ -50,7 +41,6 @@ int main(int argc, char **argv)
 
 	if (argc > 1) {
 		if(sscanf(argv[1],"%d", &ID)==1) {
-			// sprintf(topicPublish, "Diagnotics_Driver_%d",ID);
 			ROS_INFO("ID = %d", ID);
 		}
 	else{
@@ -79,14 +69,17 @@ int main(int argc, char **argv)
 	ros::NodeHandlePtr nh = boost::make_shared<ros::NodeHandle>();
 	/* Subscriber */
 	ros::Subscriber cmd_vel_to_wheel =  nh->subscribe("cmd_vel_to_wheel", 20,speedWheelCallback); 
-    /* Publisher */
-    ros::Publisher diagnostic_pub = nh->advertise<diagnostic_msgs::DiagnosticArray>("diagnostics", 20);
+	/* Publisher */
+	ros::Publisher diagnostic_pub = nh->advertise<diagnostic_msgs::DiagnosticArray>("diagnostics", 20);
     
-    diagnostic_msgs::DiagnosticArray dir_array;
+	diagnostic_msgs::DiagnosticArray dir_array;
 	diagnostic_msgs::DiagnosticStatus Driver;
-    diagnostic_msgs::KeyValue getSpeed;
-    diagnostic_msgs::KeyValue alarmRecord;
-    diagnostic_msgs::KeyValue warningRecord;
+	diagnostic_msgs::KeyValue getSpeed;
+	diagnostic_msgs::KeyValue alarmRecord;
+	diagnostic_msgs::KeyValue warningRecord;
+	std_msgs::Header timer;
+	ros::Time a_little_after_the_beginning(0, 1000000);
+	timer.frame_id = "driverID";
 
 	std::string Char_name = "/Oriental_BLVD20KM_";
 	Driver.name = Char_name + std::to_string(ID);
@@ -172,9 +165,13 @@ int main(int argc, char **argv)
 			alarmRecord.key = "Alarm record";
 			alarmRecord.value = std::to_string(alarm_status[ID-1]);
 			Driver.values.push_back(alarmRecord);
-			
 			dir_array.status.push_back(Driver);
-			// diagnostic_pub.publish(dir_array);
+
+			timer.stamp.nsec = ros::Time::now().toNSec();
+			timer.stamp.sec = ros::Time::now().toSec();
+			dir_array.header = timer;
+		
+			diagnostic_pub.publish(dir_array);
 	
 			loop_rate.sleep();
 			ros::spinOnce();
@@ -183,7 +180,6 @@ int main(int argc, char **argv)
 		Mb_close_device();
 		sleep(2);
 	}
-	//thread_one.join();
 
 	return 0;
 }

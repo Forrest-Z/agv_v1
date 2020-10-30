@@ -220,10 +220,10 @@ int main(int argc, char **argv)
 	linefolowing::speed_wheel robot;
 
 	// system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
- 	ROS_INFO("linefolowersick.cpp-222-sudo ip link set can0 type can");	
-	system("sudo ip link set can0 type can");
- 	ROS_INFO("linefolowersick.cpp-225-sudo ip link set can0 up type can bitrate 125000");	
-	system("sudo ip link set can0 up type can bitrate 125000");
+ 	// ROS_INFO("linefolowersick.cpp-222-sudo ip link set can0 type can");	
+	// system("sudo ip link set can0 type can");
+ 	// ROS_INFO("linefolowersick.cpp-225-sudo ip link set can0 up type can bitrate 125000");	
+	// system("sudo ip link set can0 up type can bitrate 125000");
 
 	//Open and initialize the serial port to the uController
   	if (argc > 1) 

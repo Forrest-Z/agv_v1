@@ -698,8 +698,9 @@ namespace move_base {
         //is negative (the default), it is just ignored and we have the same behavior as ever
         lock.lock();
         planning_retries_++;
-        if(runPlanner_ &&
-           (ros::Time::now() > attempt_end || planning_retries_ > uint32_t(max_planning_retries_))){
+        if(runPlanner_ && (ros::Time::now() > attempt_end || planning_retries_ > uint32_t(max_planning_retries_))){
+          ROS_WARN("move_base.cpp-702-ros::Time::now() > attempt_end: %d > %d", ros::Time::now(), attempt_end);
+          ROS_WARN("move_base.cpp-703-planning_retries_ > uint32_t(max_planning_retries_): %d > %d", planning_retries_, uint32_t(max_planning_retries_));
           //we'll move into our obstacle clearing mode
           state_ = CLEARING;
           runPlanner_ = false;  // proper solution for issue #523
@@ -1260,7 +1261,7 @@ namespace move_base {
     //check to see if we've moved far enough to reset our oscillation timeout
     if(distance(current_position, oscillation_pose_) >= oscillation_distance_)
     {
-      ROS_ERROR("move_base.cpp-1329-distance = %f > oscillation_distance_ = %f", distance(current_position, oscillation_pose_), oscillation_distance_);
+      ROS_WARN("move_base.cpp-1329-distance = %f > oscillation_distance_ = %f", distance(current_position, oscillation_pose_), oscillation_distance_);
       last_oscillation_reset_ = ros::Time::now();
       oscillation_pose_ = current_position;
 
@@ -1351,8 +1352,10 @@ namespace move_base {
       }
 
         //check for an oscillation condition
-        if(oscillation_timeout_ > 0.0 && last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now())
+        if((oscillation_timeout_ > 0.0) && (last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now()))
         {
+          ROS_WARN("move_base.cpp-1357 - oscillation_timeout_ > 0.0: %f > 0", oscillation_timeout_);
+          ROS_WARN("move_base.cpp-1358 - last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now(): %f < %f", last_oscillation_reset_+ros::Duration(oscillation_timeout_), ros::Time::now());
           publishZeroVelocity();
           state_ = CLEARING;
           recovery_trigger_ = OSCILLATION_R;
@@ -1367,7 +1370,7 @@ namespace move_base {
           last_valid_control_ = ros::Time::now();
           //make sure that we send the velocity command to the base
           vel_pub_.publish(cmd_vel);
-          ROS_INFO("move_base.cpp-1356-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+          ROS_INFO("move_base.cpp-1373-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
           if(recovery_trigger_ == CONTROLLING_R)
             recovery_index_ = 0;
         }
@@ -1377,6 +1380,7 @@ namespace move_base {
 
           //check if we've tried to find a valid control for longer than our time limit
           if(ros::Time::now() > attempt_end){
+            ROS_WARN("move_base.cpp-1383 - ros::Time::now() > attempt_end: %f > %f", ros::Time::now(), attempt_end);
             //we'll move into our obstacle clearing mode
             publishZeroVelocity();
             state_ = CLEARING;
@@ -1432,7 +1436,7 @@ namespace move_base {
           ROS_DEBUG_NAMED("move_base_recovery","Something should abort after this.");
 
           if(recovery_trigger_ == CONTROLLING_R){
-            ROS_ERROR("move_base.cpp-1380-Aborting because a valid control could not be found. Even after executing all recovery behaviors");
+            ROS_ERROR("move_base.cpp-1439-Aborting because a valid control could not be found. Even after executing all recovery behaviors");
             as_->setAborted(move_base_msgs::MoveBaseResult(), "Failed to find a valid control. Even after executing recovery behaviors.");
           }
           else if(recovery_trigger_ == PLANNING_R){

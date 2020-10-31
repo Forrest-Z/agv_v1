@@ -1349,8 +1349,9 @@ namespace move_base {
         //check for an oscillation condition
         if((oscillation_timeout_ > 0.0) && (last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now()))
         {
-          ROS_WARN("move_base.cpp-1357 - oscillation_timeout_ > 0.0: %f > 0", oscillation_timeout_);
-          ROS_WARN("move_base.cpp-1358 - last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now(): %f < %f", last_oscillation_reset_+ros::Duration(oscillation_timeout_), ros::Time::now());
+          ROS_WARN("move_base.cpp-1357 - oscillation_timeout_ > 0.0: %lf > 0", oscillation_timeout_);
+          ROS_WARN("move_base.cpp-1357 - last_oscillation_reset_ : %lf", last_oscillation_reset_);
+          // ROS_WARN("move_base.cpp-1358 - last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now(): %lf < %lf", last_oscillation_reset_+ros::Duration(oscillation_timeout_), ros::Time::now());
           publishZeroVelocity();
           state_ = CLEARING;
           recovery_trigger_ = OSCILLATION_R;
@@ -1375,7 +1376,7 @@ namespace move_base {
 
           //check if we've tried to find a valid control for longer than our time limit
           if(ros::Time::now() > attempt_end){
-            ROS_WARN("move_base.cpp-1383 - ros::Time::now() > attempt_end: %f > %f", ros::Time::now(), attempt_end);
+            ROS_WARN("move_base.cpp-1383 - ros::Time::now() > attempt_end");
             //we'll move into our obstacle clearing mode
             publishZeroVelocity();
             state_ = CLEARING;

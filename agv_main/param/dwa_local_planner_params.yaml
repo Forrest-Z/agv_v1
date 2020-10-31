@@ -1,18 +1,18 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters (m/s)
-  max_vel_x: 0.55  # (double, default: 0.55 m/s) The maximum x velocity for the robot in m/s
-  min_vel_x: 0.25 #  (double, default: 0.0 m/s) The minimum x velocity for the robot in m/s 
+  max_vel_x: 1  # (double, default: 0.55 m/s) The maximum x velocity for the robot in m/s
+  min_vel_x: 0.3 #  (double, default: 0.0 m/s) The minimum x velocity for the robot in m/s 
 
   max_vel_y: 0.0  # (double, default: 0.1 m/s) The maximum y velocity for the robot in m/s 
   min_vel_y: 0.0  # (double, default: -0.1 m/s) The minimum y velocity for the robot in m/s 
 
 # The velocity when robot is moving in a straight line (m/s)
   max_vel_trans:  0.55  # (double, default: 0.55 m/s) The absolute value of the maximum translational velocity for the robot in m/s 
-  min_vel_trans:  0.25  # (double, default: 0.1 m/s) The absolute value of the minimum translational velocity for the robot in m/s 
+  min_vel_trans:  0.1  # (double, default: 0.1 m/s) The absolute value of the minimum translational velocity for the robot in m/s 
 
   max_vel_theta: 0.8  # (double, default: 1.0 rad/s) The absolute value of the maximum rotational velocity for the robot in rad/s 
-  min_vel_theta: 0.5  #  (double, default: 0.4 rad/s) The absolute value of the minimum rotational velocity for the robot in rad/s 
+  min_vel_theta: 0.6  #  (double, default: 0.4 rad/s) The absolute value of the minimum rotational velocity for the robot in rad/s 
 
   acc_lim_x: 2.5  #  (double, default: 2.5 m/s2) The x acceleration limit of the robot in meters/sec^2 
   acc_lim_y: 0.0  #  (double, default: 2.5 m/s2) .The y acceleration limit of the robot in meters/sec^2 

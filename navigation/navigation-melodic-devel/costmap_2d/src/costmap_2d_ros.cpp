@@ -435,7 +435,8 @@ void Costmap2DROS::movementCB(const ros::TimerEvent &event)
 
   if (!getRobotPose(new_pose))
   {
-    ROS_WARN_THROTTLE(1.0, "Could not get robot pose, cancelling reconfiguration");
+    // ROS_WARN_THROTTLE(1.0, "Could not get robot pose, cancelling reconfiguration");
+    ROS_ERROR("costmap_2d_ros.cpp-439-Could not get robot pose, cancelling reconfiguration");
     robot_stopped_ = false;
   }
   // make sure that the robot is not moving
@@ -499,7 +500,7 @@ void Costmap2DROS::mapUpdateLoop(double frequency)
     r.sleep();
     // make sure to sleep for the remainder of our cycle time
     if (r.cycleTime() > ros::Duration(1 / frequency))
-      ROS_WARN("Map update loop missed its desired rate of %.4fHz... the loop actually took %.4f seconds", frequency,
+      ROS_WARN("costmap_2d_ros.cpp-503-Map update loop missed its desired rate of %.4fHz... the loop actually took %.4f seconds", frequency,
                r.cycleTime().toSec());
   }
 }
@@ -678,9 +679,7 @@ bool Costmap2DROS::getRobotPose(geometry_msgs::PoseStamped& global_pose) const
   // check global_pose timeout
   if (current_time.toSec() - global_pose.header.stamp.toSec() > transform_tolerance_)
   {
-    ROS_WARN_THROTTLE(1.0,
-                      "Costmap2DROS transform timeout. Current time: %.4f, global_pose stamp: %.4f, tolerance: %.4f",
-                      current_time.toSec(), global_pose.header.stamp.toSec(), transform_tolerance_);
+    ROS_WARN_THROTTLE(1.0, "costmap_2d_ros.cpp-682-Costmap2DROS transform timeout. Current time: %.4f, global_pose stamp: %.4f, tolerance: %.4f", current_time.toSec(), global_pose.header.stamp.toSec(), transform_tolerance_);
     return false;
   }
   // ROS_INFO("costmap_2d_ros.cpp-685-global_pose.x: %.3f", global_pose.pose.position.x);

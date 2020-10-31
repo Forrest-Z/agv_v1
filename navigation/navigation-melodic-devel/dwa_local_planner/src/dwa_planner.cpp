@@ -61,6 +61,9 @@ namespace dwa_local_planner {
         config.use_dwa,
         sim_period_);
 
+    ROS_INFO("dwa_planner.cpp-64- sim_time: %lf", config.sim_time);
+    ROS_INFO("dwa_planner.cpp-65- sim_granularity: %lf", config.sim_granularity);
+
     double resolution = planner_util_->getCostmap()->getResolution();
     path_distance_bias_ = resolution * config.path_distance_bias;
     // pdistscale used for both path and alignment, set  forward_point_distance to zero to discard alignment
@@ -91,19 +94,19 @@ namespace dwa_local_planner {
     vth_samp = config.vth_samples;
  
     if (vx_samp <= 0) {
-      ROS_WARN("You've specified that you don't want any samples in the x dimension. We'll at least assume that you want to sample one value... so we're going to set vx_samples to 1 instead");
+      ROS_WARN("dwa_planner.cpp-97-You've specified that you don't want any samples in the x dimension. We'll at least assume that you want to sample one value... so we're going to set vx_samples to 1 instead");
       vx_samp = 1;
       config.vx_samples = vx_samp;
     }
  
     if (vy_samp <= 0) {
-      ROS_WARN("You've specified that you don't want any samples in the y dimension. We'll at least assume that you want to sample one value... so we're going to set vy_samples to 1 instead");
+      ROS_WARN("dwa_planner.cpp-103-You've specified that you don't want any samples in the y dimension. We'll at least assume that you want to sample one value... so we're going to set vy_samples to 1 instead");
       vy_samp = 1;
       config.vy_samples = vy_samp;
     }
  
     if (vth_samp <= 0) {
-      ROS_WARN("You've specified that you don't want any samples in the th dimension. We'll at least assume that you want to sample one value... so we're going to set vth_samples to 1 instead");
+      ROS_WARN("dwa_planner.cpp-109-You've specified that you don't want any samples in the th dimension. We'll at least assume that you want to sample one value... so we're going to set vth_samples to 1 instead");
       vth_samp = 1;
       config.vth_samples = vth_samp;
     }
@@ -141,7 +144,7 @@ namespace dwa_local_planner {
       if(controller_frequency > 0) {
         sim_period_ = 1.0 / controller_frequency;
       } else {
-        ROS_WARN("A controller_frequency less than 0 has been set. Ignoring the parameter, assuming a rate of 20Hz");
+        ROS_WARN("dwa_planner.cpp-147-A controller_frequency less than 0 has been set. Ignoring the parameter, assuming a rate of 20Hz");
         sim_period_ = 0.05;
       }
     }

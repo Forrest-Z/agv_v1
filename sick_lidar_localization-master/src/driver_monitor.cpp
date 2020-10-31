@@ -146,12 +146,12 @@ bool sick_lidar_localization::DriverMonitor::initColaTransmitter(const std::stri
     m_cola_transmitter = new sick_lidar_localization::ColaTransmitter(server_adress, ip_port_cola, receive_timeout);
     if (!m_cola_transmitter->connect())
     {
-      ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't connect to localization server " << server_adress << ":" << ip_port_cola);
+      ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't connect to localization server " << server_adress << ":" << ip_port_cola);
       return false;
     }
     if (!m_cola_transmitter->startReceiverThread())
     {
-      ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't start receiver thread");
+      ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't start receiver thread");
       return false;
     }
   }
@@ -203,7 +203,7 @@ bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_lo
   // Initialize cola sender and receiver, connect to localization controlle
   if(!initColaTransmitter(m_server_adress, m_ip_port_cola, cola_request.wait_response_timeout))
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't initialize cola transmission to localization server " << m_server_adress);
+    ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: can't initialize cola transmission to localization server " << m_server_adress);
     stopColaTransmitter();
     return false;
   }
@@ -212,13 +212,13 @@ bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_lo
   ros::Time send_timestamp, receive_timestamp;
   if(!m_cola_transmitter->send(binary_request, send_timestamp))
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: send() failed to localization server " << m_server_adress << ":" << m_ip_port_cola);
+    ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: send() failed to localization server " << m_server_adress << ":" << m_ip_port_cola);
     stopColaTransmitter();
     return false;
   }
   if(!m_cola_transmitter->waitPopResponse(binary_response, cola_request.wait_response_timeout, receive_timestamp) || binary_response.size() < 2) // at least 2 byte stx and etx
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: receive() failed by localization server " << m_server_adress << ":" << m_ip_port_cola);
+    ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: receive() failed by localization server " << m_server_adress << ":" << m_ip_port_cola);
     stopColaTransmitter();
     return false;
   }
@@ -245,7 +245,7 @@ bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_lo
   }
   else
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: parse error, response from localization server \"" << cola_response.cola_ascii_response << "\" not enclosed with \"" << asciiSTX << "\" and \"" << asciiETX << "\"");
+    ROS_ERROR_STREAM("## ERROR DriverMonitor::serviceCbColaTelegram: parse error, response from localization server \"" << cola_response.cola_ascii_response << "\" not enclosed with \"" << asciiSTX << "\" and \"" << asciiETX << "\"");
   }
   stopColaTransmitter();
   return false;
@@ -270,13 +270,13 @@ bool sick_lidar_localization::DriverMonitor::resultTelegramsReceiveStatusIsOk(vo
   cola_telegram_request.wait_response_timeout = m_cola_response_timeout;
   if(!serviceCbColaTelegram(cola_telegram_request, cola_telegram_response))
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor: serviceCbColaTelegram failed, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
+    ROS_ERROR_STREAM("## ERROR DriverMonitor: serviceCbColaTelegram failed, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
     return false; // Error: localization controller not responding
   }
   sick_lidar_localization::SickLocColaTelegramMsg cola_response = sick_lidar_localization::ColaParser::decodeColaTelegram(cola_telegram_response.cola_ascii_response);
   if(cola_response.command_name != "LocState" || cola_response.parameter.size() != 1)
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor: unexpected cola response from localization controller, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
+    ROS_ERROR_STREAM("## ERROR DriverMonitor: unexpected cola response from localization controller, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
     return false; // Error decoding response from localization
   }
   if(cola_response.parameter[0] != "2")
@@ -290,13 +290,13 @@ bool sick_lidar_localization::DriverMonitor::resultTelegramsReceiveStatusIsOk(vo
   cola_telegram_request.wait_response_timeout = m_cola_response_timeout;
   if(!serviceCbColaTelegram(cola_telegram_request, cola_telegram_response))
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor: serviceCbColaTelegram failed, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
+    ROS_ERROR_STREAM("## ERROR DriverMonitor: serviceCbColaTelegram failed, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
     return false; // Error: localization controller not responding
   }
   cola_response = sick_lidar_localization::ColaParser::decodeColaTelegram(cola_telegram_response.cola_ascii_response);
   if(cola_response.command_name != "LocResultState" || cola_response.parameter.size() != 1)
   {
-    ROS_WARN_STREAM("## ERROR DriverMonitor: unexpected cola response from localization controller, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
+    ROS_ERROR_STREAM("## ERROR DriverMonitor: unexpected cola response from localization controller, cola request: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_request) << ", cola response: " << sick_lidar_localization::Utils::flattenToString(cola_telegram_response));
     return false; // Error decoding response from localization
   }
   if(cola_response.parameter[0] == "0")
@@ -306,7 +306,7 @@ bool sick_lidar_localization::DriverMonitor::resultTelegramsReceiveStatusIsOk(vo
   }
     
   // Timeout error: Localization and result telegrams activated, but no result telegrams received
-  ROS_WARN_STREAM("## ERROR DriverMonitor: Localization and result telegrams activated, timeout while waiting for result telegrams");
+  ROS_ERROR_STREAM("## ERROR DriverMonitor: Localization and result telegrams activated, timeout while waiting for result telegrams");
   return false;
 }
 

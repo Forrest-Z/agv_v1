@@ -1228,11 +1228,6 @@ namespace move_base {
   double MoveBase::distance(const geometry_msgs::PoseStamped& p1, const geometry_msgs::PoseStamped& p2)
   {
     // ROS_INFO("move_base.cpp-11178-distance()");
-
-    // ROS_INFO("move_base.cpp-1149-p1.pose.position.x: %f", p1.pose.position.x);
-    // ROS_INFO("move_base.cpp-1149-p2.pose.position.x: %f", p2.pose.position.x);
-    // ROS_INFO("move_base.cpp-1149-p1.pose.position.y: %f", p1.pose.position.y);
-    // ROS_INFO("move_base.cpp-1149-p2.pose.position.y: %f", p2.pose.position.y);
     return hypot(p1.pose.position.x - p2.pose.position.x, p1.pose.position.y - p2.pose.position.y);
   }
 
@@ -1257,12 +1252,18 @@ namespace move_base {
     if(distance(current_position, oscillation_pose_) >= oscillation_distance_)
     {
       ROS_WARN("move_base.cpp-1329-distance = %f > oscillation_distance_ = %f", distance(current_position, oscillation_pose_), oscillation_distance_);
+      // ROS_INFO("move_base.cpp-1149-current_position.x: %f", current_position.pose.position.x);
+      // ROS_INFO("move_base.cpp-1149-oscillation_pose_.x: %f", oscillation_pose_.pose.position.x);
+      // ROS_INFO("move_base.cpp-1149-current_position.y: %f", current_position.pose.position.y);
+      // ROS_INFO("move_base.cpp-1149-oscillation_pose_.y: %f", oscillation_pose_.pose.position.y);
+
       last_oscillation_reset_ = ros::Time::now();
+      ROS_WARN("move_base.cpp-1149-last_oscillation_reset_: %d", last_oscillation_reset_);
       oscillation_pose_ = current_position;
 
       //if our last recovery was caused by oscillation, we want to reset the recovery index 
       if(recovery_trigger_ == OSCILLATION_R){
-        ROS_INFO("move_base.cpp-1209-recovery_trigger_=OSCILLATION_R");
+        ROS_WARN("move_base.cpp-1209-recovery_trigger_=OSCILLATION_R");
         recovery_index_ = 0;
       }
     }
@@ -1366,7 +1367,7 @@ namespace move_base {
           last_valid_control_ = ros::Time::now();
           //make sure that we send the velocity command to the base
           vel_pub_.publish(cmd_vel);
-          ROS_INFO("move_base.cpp-1373-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
+          ROS_INFO("move_base.cpp-1373-PUBLISH cmd_vel: X=%.3lf, ANGLE=%.3lf", cmd_vel.linear.x, cmd_vel.angular.z);
           if(recovery_trigger_ == CONTROLLING_R)
             recovery_index_ = 0;
         }
@@ -1376,7 +1377,7 @@ namespace move_base {
 
           //check if we've tried to find a valid control for longer than our time limit
           if(ros::Time::now() > attempt_end){
-            ROS_WARN("move_base.cpp-1383 - ros::Time::now() > attempt_end");
+            ROS_WARN("move_base.cpp-1383 - ros::Time::now() > attempt_end: %lf", attempt_end);
             //we'll move into our obstacle clearing mode
             publishZeroVelocity();
             state_ = CLEARING;

@@ -185,7 +185,7 @@ namespace dwa_local_planner {
 
 
   bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &global_pose, geometry_msgs::Twist& cmd_vel) {
-    // ROS_INFO("dwa_planner_ros.cpp-189-dwaComputeVelocityCommands");
+    ROS_INFO("dwa_planner_ros.cpp-189-dwaComputeVelocityCommands");
     // dynamic window sampling approach to get useful velocity commands
     if(! isInitialized()){
       ROS_ERROR("dwa_planner_ros.cpp-191-This planner has not been initialized, please call initialize() before using this planner");
@@ -266,7 +266,7 @@ namespace dwa_local_planner {
 
 
   bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel) {
-    // ROS_INFO("dwa_planner_ros.cpp-266-computeVelocityCommands");
+    ROS_INFO("dwa_planner_ros.cpp-266-computeVelocityCommands");
     // dispatches to either dwa sampling control or stop and rotate control, depending on whether we have been close enough to goal
     if ( ! costmap_ros_->getRobotPose(current_pose_)) {
       ROS_ERROR("dwa_planner_ros.cpp-268-Could not get robot pose");

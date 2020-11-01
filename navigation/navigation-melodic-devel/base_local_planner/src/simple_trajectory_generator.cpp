@@ -38,7 +38,7 @@
 #include <base_local_planner/simple_trajectory_generator.h>
 
 #include <cmath>
-
+#include "ros/ros.h"
 #include <base_local_planner/velocity_iterator.h>
 
 namespace base_local_planner {
@@ -51,6 +51,7 @@ void SimpleTrajectoryGenerator::initialise(
     const Eigen::Vector3f& vsamples,
     std::vector<Eigen::Vector3f> additional_samples,
     bool discretize_by_time) {
+  ROS_ERROR("simple_trajectory_generator.cpp-54-initialise()");
   initialise(pos, vel, goal, limits, vsamples, discretize_by_time);
   // add static samples if any
   sample_params_.insert(sample_params_.end(), additional_samples.begin(), additional_samples.end());
@@ -64,6 +65,7 @@ void SimpleTrajectoryGenerator::initialise(
     base_local_planner::LocalPlannerLimits* limits,
     const Eigen::Vector3f& vsamples,
     bool discretize_by_time) {
+  // ROS_INFO("simple_trajectory_generator.cpp-68-initialise()");
   /*
    * We actually generate all velocity sample vectors here, from which to generate trajectories later on
    */
@@ -88,7 +90,8 @@ void SimpleTrajectoryGenerator::initialise(
     Eigen::Vector3f max_vel = Eigen::Vector3f::Zero();
     Eigen::Vector3f min_vel = Eigen::Vector3f::Zero();
 
-    if ( ! use_dwa_) {
+    if (!use_dwa_) {
+      ROS_INFO("simple_trajectory_generator.cpp-95-NOT use DWA");
       // there is no point in overshooting the goal, and it also may break the
       // robot behavior, so we limit the velocities to those that do not overshoot in sim_time
       double dist = hypot(goal[0] - pos[0], goal[1] - pos[1]);
@@ -104,6 +107,10 @@ void SimpleTrajectoryGenerator::initialise(
       min_vel[1] = std::max(min_vel_y, vel[1] - acc_lim[1] * sim_time_);
       min_vel[2] = std::max(min_vel_th, vel[2] - acc_lim[2] * sim_time_);
     } else {
+      // ROS_ERROR("simple_trajectory_generator.cpp-109-max_vel_x: %lf", max_vel_x);
+      // ROS_ERROR("simple_trajectory_generator.cpp-110-vel[0]: %lf", vel[0]);
+      // ROS_ERROR("simple_trajectory_generator.cpp-111-acc_lim[0]: %lf", acc_lim[0]);
+      // ROS_ERROR("simple_trajectory_generator.cpp-112-sim_period_: %lf", sim_period_);
       // with dwa do not accelerate beyond the first step, we only sample within velocities we reach in sim_period
       max_vel[0] = std::min(max_vel_x, vel[0] + acc_lim[0] * sim_period_);
       max_vel[1] = std::min(max_vel_y, vel[1] + acc_lim[1] * sim_period_);
@@ -113,6 +120,8 @@ void SimpleTrajectoryGenerator::initialise(
       min_vel[1] = std::max(min_vel_y, vel[1] - acc_lim[1] * sim_period_);
       min_vel[2] = std::max(min_vel_th, vel[2] - acc_lim[2] * sim_period_);
     }
+    ROS_INFO("simple_trajectory_generator.cpp-118-max_vel_x: %lf", max_vel[0]);
+    ROS_INFO("simple_trajectory_generator.cpp-119-min_vel_x: %lf", min_vel[0]);
 
     Eigen::Vector3f vel_samp = Eigen::Vector3f::Zero();
     VelocityIterator x_it(min_vel[0], max_vel[0], vsamples[0]);

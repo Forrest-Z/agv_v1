@@ -45,6 +45,7 @@ void LocalPlannerUtil::initialize(
     tf2_ros::Buffer* tf,
     costmap_2d::Costmap2D* costmap,
     std::string global_frame) {
+  ROS_INFO("local_planner_util.cpp-48-initialize()");
   if(!initialized_) {
     tf_ = tf;
     costmap_ = costmap;
@@ -58,6 +59,7 @@ void LocalPlannerUtil::initialize(
 
 void LocalPlannerUtil::reconfigureCB(LocalPlannerLimits &config, bool restore_defaults)
 {
+  ROS_INFO("local_planner_util.cpp-62-reconfigureCB()");
   if(setup_ && restore_defaults) {
     config = default_limits_;
   }
@@ -71,16 +73,19 @@ void LocalPlannerUtil::reconfigureCB(LocalPlannerLimits &config, bool restore_de
 }
 
 costmap_2d::Costmap2D* LocalPlannerUtil::getCostmap() {
+  // ROS_INFO("local_planner_util.cpp-76-getCostmap()");
   return costmap_;
 }
 
 LocalPlannerLimits LocalPlannerUtil::getCurrentLimits() {
+  // ROS_INFO("local_planner_util.cpp-81-getCurrentLimits()");
   boost::mutex::scoped_lock l(limits_configuration_mutex_);
   return limits_;
 }
 
 
 bool LocalPlannerUtil::getGoal(geometry_msgs::PoseStamped& goal_pose) {
+  // ROS_INFO("local_planner_util.cpp-88-getGoal()");
   //we assume the global goal is the last point in the global plan
   return base_local_planner::getGoalPose(*tf_,
         global_plan_,
@@ -89,8 +94,9 @@ bool LocalPlannerUtil::getGoal(geometry_msgs::PoseStamped& goal_pose) {
 }
 
 bool LocalPlannerUtil::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan) {
+  // ROS_INFO("local_planner_util.cpp-97-setPlan()");
   if(!initialized_){
-    ROS_ERROR("Planner utils have not been initialized, please call initialize() first");
+    ROS_ERROR("local_planner_util.cpp-99-Planner utils have not been initialized, please call initialize() first");
     return false;
   }
 
@@ -103,6 +109,7 @@ bool LocalPlannerUtil::setPlan(const std::vector<geometry_msgs::PoseStamped>& or
 }
 
 bool LocalPlannerUtil::getLocalPlan(const geometry_msgs::PoseStamped& global_pose, std::vector<geometry_msgs::PoseStamped>& transformed_plan) {
+  // ROS_INFO("local_planner_util.cpp-112-getLocalPlan()");
   //get the global plan in our frame
   if(!base_local_planner::transformGlobalPlan(
       *tf_,
@@ -111,12 +118,13 @@ bool LocalPlannerUtil::getLocalPlan(const geometry_msgs::PoseStamped& global_pos
       *costmap_,
       global_frame_,
       transformed_plan)) {
-    ROS_WARN("local_planner_util.cpp-114-Could not transform the global plan to the frame of the controller");
+    ROS_WARN("local_planner_util.cpp-121-Could not transform the global plan to the frame of the controller");
     return false;
   }
 
   //now we'll prune the plan based on the position of the robot
   if(limits_.prune_plan) {
+    // ROS_INFO("local_planner_util.cpp-127-limits_.prune_plan = true");
     base_local_planner::prunePlan(global_pose, transformed_plan, global_plan_);
   }
   return true;

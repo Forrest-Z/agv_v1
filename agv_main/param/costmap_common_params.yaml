@@ -10,8 +10,9 @@ raytrace_range: 3.5      # Khoang cach an toan de robot di chuyen (m) (parameter
 # footprint: [[-0.5025, -0.4], [-0.5025, 0.4], [0.7, 0.4], [0.7, -0.4]]    
 footprint: [[-0.5, -0.35], [-0.5, 0.35], [0.55, 0.35], [0.55, -0.35]]    
 # robot_radius: 0.45          # Ban kinh robot (m) - (duong tron tam robot va diem xa nhat tren robot) (The radius of the robot in meters, this parameter should only be set for circular robots, all others should use the footprint parameter described above.)
+
 inflation_radius: 2         # Ban kinh toi da khoang cach tu vat can ma phat sinh cost. Ngoai khoang tren robot se coi tat ca cac path co cost bang nhau (the maximum distance from obstacles at which a cost should be incurred. the robot will treat all paths that stay inflation_radius (meters) or more away from obstacles as having equal obstacle cost)
-# cost_scaling_factor: 3.0
+cost_scaling_factor: 3.0
 
 map_type: costmap
 # Info: Thong tin ve cam bien laser: {sensor_frame: frame_name, data_type: LaserScan, topic: topic_name, marking: true, clearing: true}

@@ -62,17 +62,18 @@ PLUGINLIB_EXPORT_CLASS(base_local_planner::TrajectoryPlannerROS, nav_core::BaseL
 namespace base_local_planner {
 
   void TrajectoryPlannerROS::reconfigureCB(BaseLocalPlannerConfig &config, uint32_t level) {
-      if (setup_ && config.restore_defaults) {
-        config = default_config_;
-        //Avoid looping
-        config.restore_defaults = false;
-      }
-      if ( ! setup_) {
-        default_config_ = config;
-        setup_ = true;
-      }
-      tc_->reconfigure(config);
-      reached_goal_ = false;
+    ROS_INFO("trajectory_planner_ros-65-reconfigureCB()");
+    if (setup_ && config.restore_defaults) {
+      config = default_config_;
+      //Avoid looping
+      config.restore_defaults = false;
+    }
+    if ( ! setup_) {
+      default_config_ = config;
+      setup_ = true;
+    }
+    tc_->reconfigure(config);
+    reached_goal_ = false;
   }
 
   TrajectoryPlannerROS::TrajectoryPlannerROS() :
@@ -89,7 +90,7 @@ namespace base_local_planner {
       std::string name,
       tf2_ros::Buffer* tf,
       costmap_2d::Costmap2DROS* costmap_ros){
-    ROS_INFO("trajectory_planner_ros-92-initialize");
+    ROS_INFO("trajectory_planner_ros-92-initialize()");
     if (! isInitialized()) {
 
       ros::NodeHandle private_nh("~/" + name);
@@ -305,6 +306,7 @@ namespace base_local_planner {
   }
 
   bool TrajectoryPlannerROS::stopWithAccLimits(const geometry_msgs::PoseStamped& global_pose, const geometry_msgs::PoseStamped& robot_vel, geometry_msgs::Twist& cmd_vel){
+    ROS_WARN("trajectory_planner_ros-308-stopWithAccLimits");
     //slow down with the maximum possible acceleration... we should really use the frequency that we're running at to determine what is feasible
     //but we'll use a tenth of a second to be consistent with the implementation of the local planner.
     double vx = sign(robot_vel.pose.position.x) * std::max(0.0, (fabs(robot_vel.pose.position.x) - acc_lim_x_ * sim_period_));

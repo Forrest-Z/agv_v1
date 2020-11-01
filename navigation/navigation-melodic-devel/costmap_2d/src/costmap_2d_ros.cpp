@@ -349,6 +349,7 @@ void Costmap2DROS::reconfigureCB(costmap_2d::Costmap2DConfig &config, uint32_t l
   }
   map_update_thread_shutdown_ = false;
   double map_update_frequency = config.update_frequency;
+  ROS_INFO("costmap_2d_ros.cpp-352-map_update_frequency: %lf", map_update_frequency);
 
   double map_publish_frequency = config.publish_frequency;
   if (map_publish_frequency > 0)
@@ -500,8 +501,7 @@ void Costmap2DROS::mapUpdateLoop(double frequency)
     r.sleep();
     // make sure to sleep for the remainder of our cycle time
     if (r.cycleTime() > ros::Duration(1 / frequency))
-      ROS_WARN("costmap_2d_ros.cpp-503-Map update loop missed its desired rate of %.4fHz... the loop actually took %.4f seconds", frequency,
-               r.cycleTime().toSec());
+      ROS_WARN("costmap_2d_ros.cpp-503-Map update loop missed its desired rate of %.4fHz... the loop actually took %.4f seconds", 1/frequency, r.cycleTime().toSec());
   }
 }
 

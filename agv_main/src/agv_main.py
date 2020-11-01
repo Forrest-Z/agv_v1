@@ -150,6 +150,9 @@ def pubActionStatus(msg, status):
 if __name__ == '__main__':
     rospy.init_node('agv_main', log_level=rospy.DEBUG)
 
+    os.system('sudo rm -rf /home/robotics/.ros/log')
+    rospy.loginfo("agv_main.py-$sudo rm -rf /home/robotics/.ros/log")
+
     os.system('sudo ip link set can0 type can')
     os.system('sudo ip link set can0 up type can bitrate 125000')
     rospy.loginfo("agv_main.py-Config Can port")

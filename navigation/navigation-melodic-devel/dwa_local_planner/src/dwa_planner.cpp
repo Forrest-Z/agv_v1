@@ -63,6 +63,8 @@ namespace dwa_local_planner {
 
     ROS_INFO("dwa_planner.cpp-64- sim_time: %lf", config.sim_time);
     ROS_INFO("dwa_planner.cpp-65- sim_granularity: %lf", config.sim_granularity);
+    ROS_INFO("dwa_planner.cpp-66- angular_sim_granularity: %lf", config.angular_sim_granularity);
+    ROS_INFO("dwa_planner.cpp-67- sim_period_: %lf", sim_period_);
 
     double resolution = planner_util_->getCostmap()->getResolution();
     path_distance_bias_ = resolution * config.path_distance_bias;

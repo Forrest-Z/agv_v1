@@ -30,7 +30,7 @@ ros::Subscriber navigation;
 void speedWheelCallback(const driver_blvd_controller::speed_wheel& robot)
 {
 	speed[0] = robot.wheel_letf;
-  speed[1] = robot.wheel_right;
+  	speed[1] = robot.wheel_right;
 } //navigationCallback
 
 int main(int argc, char **argv)
@@ -41,10 +41,10 @@ int main(int argc, char **argv)
 
 	if (argc > 1) {
 		if(sscanf(argv[1],"%d", &ID)==1) {
-			ROS_INFO("ID = %d", ID);
+			ROS_INFO("blvd20km_controller.cpp-44-ID = %d", ID);
 		}
 	else{
-			ROS_ERROR("ucontroller index parameter invalid");
+			ROS_ERROR("blvd20km_controller.cpp-47-ucontroller index parameter invalid");
 			return 1;
 		}
 	}
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	baud = DEFAULT_BAUDRATE;
 	if (argc > 3) {
 		if(sscanf(argv[3],"%d", &baud)!=1) {
-		  ROS_ERROR("ucontroller baud rate parameter invalid");
+		  ROS_ERROR("blvd20km_controller.cpp-62-ucontroller baud rate parameter invalid");
 		  return 1;
 		}
 	}
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 	while(ros::ok())
 	{
 		/* onpen comport */
-		ROS_INFO("connection initializing (%s) at %d baud", port, baud);
+		ROS_INFO("blvd20km_controller.cpp-92-connection initializing (%s) at %d baud", port, baud);
 		Mb_open_device(port,baud,1,8,1); /*even , 8 bit, 1 stop_bit*/
 		sleep(1);
 		if(stat(port, &sb) == 0)
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 			
 			if(check_connect != 0){
 				for(int i= 0; i<4; i++) ROS_INFO("  ");
-				ROS_INFO("Disconnected");
+				ROS_INFO("blvd20km_controller.cpp-116-Disconnected");
 				break;
 			} 
 

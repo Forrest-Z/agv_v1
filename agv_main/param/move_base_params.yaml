@@ -8,4 +8,8 @@ clearing_rotation_allowed: true # (bool, default: true) Cho phep robot xoay tai 
 planner_frequency: 5.0          # (double, default: 0.0 Hz) Tan so tao global_planner. Neu dat la 0,0, global_planner se chi chay khi nhan duoc new goal hoac local_planner bao rang plan bi chan (The rate in Hz at which to run the global planning loop. If the frequency is set to 0.0, the global planner will only run when a new goal is received or the local planner reports that its path is blocked)
 oscillation_timeout: 5.0        # (double, default: 0.0 s) Khoang thoi gian cho phep dao dong truoc khi thuc hien hanh vi phuc hoi (How long in seconds to allow for oscillation before executing recovery behaviors. A value of 0.0 corresponds to an infinite timeout)
 oscillation_distance: 0.5       # (double, default: 0.5 m) (How far in meters the robot must move to be considered not to be oscillating. Moving this far resets the timer counting up to the ~oscillation_timeout)
-max_planning_retries: -1        # (int32_t, default: -1) So lan cho phep re-planner truoc khi recovery_behavior. Neu set -1 tuong ung voi re-planner vo han (How many times to allow for planning retries before executing recovery behaviors. A value of -1.0 corresponds to an infinite retries)
+max_planning_retries: 1        # (int32_t, default: -1) So lan cho phep re-planner truoc khi recovery_behavior. Neu set -1 tuong ung voi re-planner vo han (How many times to allow for planning retries before executing recovery behaviors. A value of -1.0 corresponds to an infinite retries)
+
+# base_global_planner: "global_planner/GlobalPlanner"
+# base_global_planner: "navfn/NavfnROS"
+base_global_planner: "carrot_planner/CarrotPlanner"

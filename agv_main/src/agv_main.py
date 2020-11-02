@@ -114,7 +114,7 @@ def lineInFunction(msg):
     pub_charging.publish(msg)
     rospy.loginfo("agv_main.py-publish chargingIn: " + str(msg))
 def liftFunction(msg):
-    print ("agv_main.py-liftUpFunction")
+    print ("agv_main.py-liftFunction")
     global pub_lift
     pubActionStatus(msg, 1)
     pub_lift.publish(msg)

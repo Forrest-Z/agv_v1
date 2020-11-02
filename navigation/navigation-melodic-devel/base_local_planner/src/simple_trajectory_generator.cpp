@@ -121,7 +121,7 @@ void SimpleTrajectoryGenerator::initialise(
       min_vel[2] = std::max(min_vel_th, vel[2] - acc_lim[2] * sim_period_);
     }
     ROS_INFO("simple_trajectory_generator.cpp-118-max_vel_x: %lf", max_vel[0]);
-    ROS_INFO("simple_trajectory_generator.cpp-119-min_vel_x: %lf", min_vel[0]);
+    // ROS_INFO("simple_trajectory_generator.cpp-119-min_vel_x: %lf", min_vel[0]);
 
     Eigen::Vector3f vel_samp = Eigen::Vector3f::Zero();
     VelocityIterator x_it(min_vel[0], max_vel[0], vsamples[0]);

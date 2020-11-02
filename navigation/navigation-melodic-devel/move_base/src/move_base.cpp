@@ -1352,6 +1352,7 @@ namespace move_base {
         {
           ROS_WARN("move_base.cpp-1357 - oscillation_timeout_ > 0.0: %lf > 0", oscillation_timeout_);
           ROS_WARN("move_base.cpp-1357 - last_oscillation_reset_ : %lf", last_oscillation_reset_);
+          ROS_WARN("move_base.cpp-1357 - ros::Duration(oscillation_timeout_) : %lf", ros::Duration(oscillation_timeout_));
           // ROS_WARN("move_base.cpp-1358 - last_oscillation_reset_ + ros::Duration(oscillation_timeout_) < ros::Time::now(): %lf < %lf", last_oscillation_reset_+ros::Duration(oscillation_timeout_), ros::Time::now());
           publishZeroVelocity();
           state_ = CLEARING;

@@ -156,20 +156,23 @@ void mlsCallback(const linefolowing::MLS_Measurement& msg)
 	{
 		if(msg.position[2] > 0.00)
 		{	
-			present_speed_setting = 0;
-			direct = 0;
+			if(msg.position[0] != 0.00 && msg.position[1] != 0.00)
+			{
+				present_speed_setting = 0;
+				direct = 0;
 
-			robot.wheel_letf = 0;
-			robot.wheel_right = 0;
-			speedwheel.publish(robot);
+				robot.wheel_letf = 0;
+				robot.wheel_right = 0;
+				speedwheel.publish(robot);
 
-			agv_msgs::agv_action charging_action;
-			charging_action.action = action_;
-			charging_action.status = 3;
-			charger_status_pub.publish(charging_action);
-			ROS_INFO("linefolwersick.cpp-170: Publish result");	
-			// ROS_INFO("linefolwersick.cpp-168: Vung 3, stop  dir = %d", direct);	
-			for(int i = 0; i<0; i++) ROS_INFO(" ");
+				agv_msgs::agv_action charging_action;
+				charging_action.action = action_;
+				charging_action.status = 3;
+				charger_status_pub.publish(charging_action);
+				ROS_INFO("linefolwersick.cpp-170: Publish result");	
+				// ROS_INFO("linefolwersick.cpp-168: Vung 3, stop  dir = %d", direct);	
+				for(int i = 0; i<0; i++) ROS_INFO(" ");
+			}			
 		}
 		else if(msg.position[2] <= 0.00)
 		{

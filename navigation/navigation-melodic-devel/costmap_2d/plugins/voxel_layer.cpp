@@ -283,7 +283,7 @@ void VoxelLayer::raytraceFreespace(const Observation& clearing_observation, doub
   {
     ROS_WARN_THROTTLE(
         1.0,
-        "The origin for the sensor at (%.2f, %.2f, %.2f) is out of map bounds. So, the costmap cannot raytrace for it.",
+        "voxel_layer.cpp-286-The origin for the sensor at (%.2f, %.2f, %.2f) is out of map bounds. So, the costmap cannot raytrace for it.",
         ox, oy, oz);
     return;
   }
